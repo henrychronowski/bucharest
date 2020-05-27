@@ -1,8 +1,10 @@
 # bucharest
 
-//TODO: Update information to be correct for this project
+Repository for Game Time
 
 Using Unity Version 2019.3.14f1
+
+
 
 --Git Standards--
 
