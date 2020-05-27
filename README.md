@@ -1,5 +1,7 @@
 # bucharest
 
+//TODO: Update information to be correct for this project
+
 Using Unity Version 2019.3.14f1
 
 --Git Standards--
