@@ -87,75 +87,98 @@ General Workflow
 
 
 Git Master Workflow
-Branch Naming Conventions
-All feature branches should follow this naming convention: feature_featureName
+
+Branch Naming Conventions:
+
+	All feature branches should follow this naming convention: feature_featureName
 
 Example of creating a feature branch for player movement:
-git checkout -b feature_playerMovement
+
+	git checkout -b feature_playerMovement
+	
 Creating a new branch
-git checkout -b <branch name>    (Creates a new branch and switches to it)
-git push --set-upstream origin <branch name> (Pushes branch to the remote repository)
+
+	git checkout -b <branch name>    (Creates a new branch and switches to it)
+	git push --set-upstream origin <branch name> (Pushes branch to the remote repository)
+	
 Deleting a branch
-git branch -d <branch name>
+
+	git branch -d <branch name>
+
 Swapping to a different branch	
-git checkout <branch name>
+	
+	git checkout <branch name>
+	
 Merging branches
+
 **Merging branches should only be done once a feature is complete unless the programmers are unified in awareness and agreement.**
 
-Make sure you are on the feature branch that you want to merge
-Follow steps 1-5 in the General Workflow
-git checkout <branch name>    (Switches to specified branch, most likely will be dev)
-Follow steps 1-4 in updating branches
-git merge <branch you want to merge>
-git status
-git push
+	1. Make sure you are on the feature branch that you want to merge
+	2. Follow steps 1-5 in the General Workflow
+	3. git checkout <branch name>    (Switches to specified branch, most likely will be dev)
+	4. Follow steps 1-4 in updating branches
+	5. git merge <branch you want to merge>
+	6. git status
+	7. git push
 
-Example merging test branch into dev
-(On test branch)
-git status
-If changes exist:
-git add <file/folder name>
-git commit -m 'commit message'
-git push
-If no changes/after committing changes:
-git checkout dev    (Switch to dev branch)
+Example merging test branch into dev:
 
-(On dev branch)
-git status
-git fetch
-git pull
-git merge test (Merge test into dev)
-git status
-git push
+	(On test branch)
+	1. git status
+	2. If changes exist:
+	3. git add <file/folder name>
+	4. git commit -m 'commit message'
+	5. git push
+	6. If no changes/after committing changes:
+	7. git checkout dev    (Switch to dev branch)
+
+	(On dev branch)
+	8. git status
+	9. git fetch
+	10. git pull
+	11. git merge test (Merge test into dev)
+	12. git status
+	13. git push
 	
 **If you run into merge conflicts let a Git Master know!**
 
 Tagging
-A tag in Git for this project is a pointer to a specific commit. We will use tags for testing builds and the sprint deliverable each week. This will make it easy to refer back to different stages of the project if needed.
+
+A tag in Git for this project is a pointer to a specific commit. 
+We will use tags for testing builds. This will make it easy to refer back to different stages of the project if needed.
 
 To create a tag on a commit, use the git tag command with one or both of the following options.
-Use the -a <tag_name> option to add a name to a tag
-Use the -m <tag_name> option to add a message to a tag
-Using no option with the tag name will create a lightweight pointer to a commit
 
-Follow this string of options with the commit ID of your current commit. To find a specific commit ID, use the git log command and copy and paste the desired ID (Only copy the hex number). 
+	Use the -a <tag_name> option to add a name to a tag
+	
+	Use the -m <tag_name> option to add a message to a tag
+	
+	Using no option with the tag name will create a lightweight pointer to a commit
 
-To push the tag to the remote repository, use the git push origin tag <tag_name> command.
+	Follow the string of options with the commit ID of your current commit. 
+	
+	To find a specific commit ID, use the git log command and copy and paste the desired ID (Only copy the hex number). 
 
-To list all of the tags that have been created, use the git tag command.
+	To push the tag to the remote repository, use the git push origin tag <tag_name> command.
+
+	To list all of the tags that have been created, use the git tag command.
+	
 Artist Pipeline
-Asset Location
-All art assets will go into the ArtAssets folder, and not directly into the Unity Assets folder. The ArtAssets folder will be located in the project folder (..\sp20-egd220-project03-section06-team02\FreshAssets). Programmers or designers will be responsible for moving art assets into the Unity project and implementing them in the game. 
 
-Pushing Assets in Git
-Make sure you are on the dev branch
-git checkout dev
-git status
-git fetch
-git pull (if fetch finds changes)
-git status 
-git add <file/folder name>
-git status
-git commit -m 'commit message'
-git status
-git push
+Asset Location
+
+TBD 
+
+Pushing Assets in Git (Artists)
+
+	1. Make sure you are on the dev branch
+	2. git checkout dev
+	3. git status
+	4. git fetch
+	5. git pull (if fetch finds changes)
+	6. git status 
+	7. git add <file/folder name>
+	8. git status
+	9. git commit -m 'commit message'
+	10. git status
+	11. git push
