@@ -20,15 +20,20 @@ Dev Branch - Work in progress branch. This branch is where all of the unstable c
 Feature Branches - Branches created off of the dev branch that are meant for specific features. A Feature Branch should relate to a user story. These branches are mostly for the programmers or designers to mess around with game features. If you need a new feature branch to be created, let a Git Master know and they will create one if necessary. Keep pushing to these branches while a feature is still in progress, and make sure that you notify the other programmers/designers in Mattermost when you are going to push and pull from a branch. Notifying others when you push and pull will help to avoid merge conflicts. It also lets everyone else on the team know what you are working on, and what kind of progress has been made. 
 
 Once a feature is complete and you are ready to merge, let a Git Master know (preferably through Mattermost). The Git Master will then handle merging that feature branch into the Dev branch.  
+
+
 ----------PIPELINE----------
+
 Updating Your Branch
 **Before doing anything on any branch or when starting a new work session, make sure that your working tree is clear and your branch is up to date.**
 
 	Follow these steps to update your current branch:
-git status (Checks for any changes on your local machine)
-git fetch (Checks for any changes in remote repository)
-Notify the team in Mattermost that you are pulling changes from a specific branch.
-git pull (If fetch shows changes, pull the changes to your local machine)
+	
+	1. git status (Checks for any changes on your local machine)
+	2. git fetch (Checks for any changes in remote repository)
+	3. Notify the team in Discord that you are pulling changes from a specific branch.
+	4. git pull (If fetch shows changes, pull the changes to your local machine)
+	
 Basic workflow while on any branch
 This is the workflow that everyone will follow while on their own branch. Merging branches will be handled by the Git Master.
 General Workflow
