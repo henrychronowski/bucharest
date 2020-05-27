@@ -50,6 +50,7 @@ Once a feature is complete and you are ready to merge, let a Git Master know (pr
 ----------PIPELINE----------
 
 Updating Your Branch
+
 **Before doing anything on any branch or when starting a new work session, make sure that your working tree is clear and your branch is up to date.**
 
 	Follow these steps to update your current branch:
@@ -59,7 +60,9 @@ Updating Your Branch
 	3. Notify the team in Discord that you are pulling changes from a specific branch.
 	4. git pull (If fetch shows changes, pull the changes to your local machine)
 	
+	
 Basic workflow while on any branch
+
 This is the workflow that everyone will follow while on their own branch. Merging branches will be handled by the Git Master.
 General Workflow
 **Important note: You do not need to include <> in any of the following commands, they are just being used to differentiate the command from a file/folder name**
