@@ -10,16 +10,41 @@ Basic Etiquette
 Since the entire team is working in a repository, all members must be mindful of each other when pushing changes. Git and command line seem scary at first, but once you get the hang of it it’s not that bad. Since this project is entirely remote, it is extremely important that we all follow the rules outlined below.
 
 Communication is very important when using Git as a team. Make sure that you let the team know when you are merging branches, and speak up if you run into a merge conflict. This will help in not overwriting someone else’s work. If you feel that someone else’s work should be changed, make sure that you ask them first. Do not change other people’s code without asking.
+
 Git Master(s)
-	A Git Master is a member of the team that is well-versed and comfortable with using Git in a team setting. There can be more than one Git Master on a team. The Git Master is responsible for managing and maintaining the team’s repository. For this project, the Git Master(s) will handle creating and merging branches, in order to minimize merge conflicts.
+	
+	-A Git Master is a member of the team that is well-versed and comfortable with using Git in a team setting. 
+	-There can be more than one Git Master on a team. 
+	-The Git Master is responsible for managing and maintaining the team’s repository. 
+	-For this project, the Git Master(s) will handle creating and merging branches, in order to minimize merge conflicts.
 
-Git Masters for this project: Ethan Heil, Henry Chronowski
+	Git Masters for this project: TBD
+	
 Overview of Branches
-Master Branch - Branch meant for the finished/polished product. Do not work on the master branch!
-Dev Branch - Work in progress branch. This branch is where all of the unstable code and unfinished assets go. Artists can push assets to this branch without issue or needing to worry about merging branches. Designers and programmers should not touch code while in this branch!
-Feature Branches - Branches created off of the dev branch that are meant for specific features. A Feature Branch should relate to a user story. These branches are mostly for the programmers or designers to mess around with game features. If you need a new feature branch to be created, let a Git Master know and they will create one if necessary. Keep pushing to these branches while a feature is still in progress, and make sure that you notify the other programmers/designers in Mattermost when you are going to push and pull from a branch. Notifying others when you push and pull will help to avoid merge conflicts. It also lets everyone else on the team know what you are working on, and what kind of progress has been made. 
 
-Once a feature is complete and you are ready to merge, let a Git Master know (preferably through Mattermost). The Git Master will then handle merging that feature branch into the Dev branch.  
+	Master Branch - Branch meant for the finished/polished product. Do not work on the master branch!
+	
+	Dev Branch - Work in progress branch. This branch is where all of the unstable code and unfinished assets go. 
+		     Artists can push assets to this branch without issue or needing to worry about merging branches. 
+		     Designers and programmers should not touch code while in this branch!
+	
+	Feature Branches - Branches created off of the dev branch that are meant for specific features. 
+			   	A Feature Branch should relate to a user story. 
+				
+			   	These branches are mostly for the programmers or designers to mess around with game features. 
+			   
+			   	If you need a new feature branch to be created, 
+					let a Git Master know and they will create one if necessary.
+				
+			   	Keep pushing to these branches while a feature is still in progress, 
+			   		and make sure that you notify the other programmers/designers in Discord when you are 
+			   		going to push and pull from a branch. 
+			   
+			   	Notifying others when you push and pull will help to avoid merge conflicts. 
+			   		It also lets everyone else on the team know what you are working on, 
+					and what kind of progress has been made. 
+
+Once a feature is complete and you are ready to merge, let a Git Master know (preferably through Discord). The Git Master will then handle merging that feature branch into the Dev branch.  
 
 
 ----------PIPELINE----------
