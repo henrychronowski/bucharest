@@ -64,21 +64,26 @@ Updating Your Branch
 Basic workflow while on any branch
 
 This is the workflow that everyone will follow while on their own branch. Merging branches will be handled by the Git Master.
+
 General Workflow
+
 **Important note: You do not need to include <> in any of the following commands, they are just being used to differentiate the command from a file/folder name**
 
-git status (Checks for any changes on your local machine)
-git add <file/folder name> (Stages files for commit)
- 	Optional add commands:
-git add -u (Stages all modified files for commit, will not stage newly created files)
-git add <folder name> (Stages everything in that folder)
-git commit -m 'message' (Commits files to be pushed, add a commit message so you know what was worked on)
+	1. git status (Checks for any changes on your local machine)
+	2. git add <file/folder name> (Stages files for commit)
+ 		Optional add commands:
+			git add -u (Stages all modified files for commit, will not stage newly created files)
+			git add <folder name> (Stages everything in that folder)
+			
+	3. git commit -m 'message' (Commits files to be pushed, add a commit message so you know what was worked on)
+	
 		Example commit messages:
-'Adding README.txt'
-'Adding move function to player.cs'
-'Adding playerSprite.png to Assets folder'
-Notify the team that you are pushing to your branch.
-git push (Pushes files to the remote repository ON YOUR CURRENT BRANCH) 
+	'Adding README.txt'
+	'Adding move function to player.cs'
+	'Adding playerSprite.png to Assets folder'
+	
+	4. Notify the team that you are pushing to your branch.
+	4. git push (Pushes files to the remote repository ON YOUR CURRENT BRANCH) 
 
 
 Git Master Workflow
