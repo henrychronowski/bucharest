@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\Camera\Camera1.cs" />
     <Compile Include="Assets\Scripts\Camera\Camera2.cs" />
     <Compile Include="Assets\Scripts\Camera\Camera3.cs" />
+    <Compile Include="Assets\Scripts\Camera\Camera4.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraWatch.cs" />
     <Compile Include="Assets\Scripts\Camera\HtestMovement.cs" />
