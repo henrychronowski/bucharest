@@ -23,8 +23,9 @@ public class MapGen : MonoBehaviour
     {
         float[,] NoiseMap = generateNoiseMaps(mapWidth, mapHeight);
 
-        GetComponent<MeshFilter>().mesh = createMesh(NoiseMap);
-
+        Mesh finalMesh = createMesh(NoiseMap);
+        GetComponent<MeshFilter>().mesh = finalMesh;
+        GetComponent<MeshCollider>().sharedMesh = finalMesh;
 
     }
 
@@ -111,11 +112,11 @@ public class MapGen : MonoBehaviour
             for (int Z = 0; Z < mapHeight; Z++)
             {
                 triangles[tris + 0] = verts + 1;
-                triangles[tris + 1] = verts + mapWidth + 1;
+                triangles[tris + 1] = verts + mapHeight + 1;
                 triangles[tris + 2] = verts + 0;
 
-                triangles[tris + 3] = verts + mapWidth + 2;
-                triangles[tris + 4] = verts + mapWidth + 1;
+                triangles[tris + 3] = verts + mapHeight + 2;
+                triangles[tris + 4] = verts + mapHeight + 1;
                 triangles[tris + 5] = verts + 1;
 
                 verts++;
