@@ -411,7 +411,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 870253090}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: -0.571, y: 1.456, z: -0.098}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
@@ -444,10 +444,6 @@ GameObject:
   - component: {fileID: 1023131210}
   - component: {fileID: 1023131209}
   - component: {fileID: 1023131208}
-  - component: {fileID: 1023131212}
-  - component: {fileID: 1023131211}
-  - component: {fileID: 1023131213}
-  - component: {fileID: 1023131214}
   - component: {fileID: 1023131215}
   m_Layer: 0
   m_Name: Main Camera
@@ -521,64 +517,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1023131211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1023131207}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 785a94f11115a2f47b3b1902aede3948, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 870253095}
-  offset: {x: 0, y: 0, z: 0}
-  damping: 1
---- !u!114 &1023131212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1023131207}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dd1cc780ef54fd4eb63eb2f30e60623, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 870253090}
---- !u!114 &1023131213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1023131207}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72682a23f45745e48b7c0faba2ae667c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 870253095}
-  offset: {x: 0, y: 0, z: 0}
-  damping: 5
---- !u!114 &1023131214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1023131207}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4218864d22a42f48ba2288dbe04a57b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 870253095}
-  offset: {x: 0, y: -3, z: 5}
-  rotateSpeed: 1
 --- !u!114 &1023131215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -595,8 +533,7 @@ MonoBehaviour:
   minOffset: 1
   maxOffset: 4
   damping: 10
-  minTurnAngle: -90
-  maxTurnAngle: 0
+  xAngle: {x: -75, y: 0}
   turnSpeed: {x: 4, y: 4}
 --- !u!1 &1559400847
 GameObject:

@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//Freely ish moving camera
+/* Author: Henry Chronowski
+ * Updated: 06/02/2020
+ * Purpose: 3rd-person camera controller with collisions and mouse controls
+ * */
 
-public class Camera4 : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
 	[SerializeField] Transform target;
 	[SerializeField] float minOffset = 1.0f;
 	[SerializeField] float maxOffset = 4.0f;
 	[SerializeField] float damping = 0.0f;
-	[SerializeField] float minTurnAngle = -90.0f;
-	[SerializeField] float maxTurnAngle = 0.0f;
+	[SerializeField] Vector2 xAngle = new Vector2(-75.0f, 0.0f);	//x = min, y = max
 	[SerializeField] Vector2 turnSpeed = new Vector2(4.0f, 4.0f);
 
 	private float rotX = 0.0f;
@@ -29,13 +31,14 @@ public class Camera4 : MonoBehaviour
 	private void LateUpdate()
 	{
 		RaycastHit hit;
-		float y = Input.GetAxis("Mouse X") * turnSpeed.x;
-		rotX += Input.GetAxis("Mouse Y") * turnSpeed.y;
+		float y = Input.GetAxis("Mouse X") * turnSpeed.y;
+		rotX += Input.GetAxis("Mouse Y") * turnSpeed.x;
 
-		rotX = Mathf.Clamp(rotX, minTurnAngle, maxTurnAngle);
-		transform.eulerAngles = new Vector3(-rotX, transform.eulerAngles.y + y, 0.0f);
+		rotX = Mathf.Clamp(rotX, xAngle.x, xAngle.y);
+		transform.eulerAngles = new Vector3(-rotX, transform.eulerAngles.y + y, transform.eulerAngles.z);
 
-		if(Physics.Linecast(target.position, transform.position, out hit))
+		// Clamps offset to collide with objects
+		if (Physics.Linecast(target.position, transform.position, out hit))
 		{
 			offset = Mathf.Clamp(hit.distance, minOffset, maxOffset);
 		}
@@ -44,6 +47,7 @@ public class Camera4 : MonoBehaviour
 			offset = maxOffset;
 		}
 
+		// Lerps the above clamp from the previous to prevent epilepsy
 		offset = Mathf.Lerp(prevOffset, offset, Time.deltaTime * damping);
 
 		transform.position = target.position - (transform.forward * offset);
