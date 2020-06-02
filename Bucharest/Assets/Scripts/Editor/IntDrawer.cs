@@ -1,4 +1,10 @@
-﻿using System.Collections;
+﻿/*
+ * Author: Henry Chronowski
+ * Updated: 02/06/2020
+ * Purpose: A custom int property drawer
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
