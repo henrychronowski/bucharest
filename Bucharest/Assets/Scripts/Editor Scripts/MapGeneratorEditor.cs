@@ -11,9 +11,9 @@ public class MapGeneratorEditor : Editor
         MapGen mapGen = (MapGen)target;
         if (DrawDefaultInspector())
         {
-            if (mapGen.autoUpdate)
+            if (mapGen.GetAutoUpdate())
             {
-                mapGen.generate();
+                mapGen.Generate();
             }
         }
 
@@ -21,7 +21,7 @@ public class MapGeneratorEditor : Editor
 
         if (GUILayout.Button("Generate"))
         {
-            mapGen.generate();
+            mapGen.Generate();
         }
     }
 }
