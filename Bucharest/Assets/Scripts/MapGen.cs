@@ -1,5 +1,5 @@
 ﻿/* Author(s): Alexander Waters
- * Updated: mm/dd/yyyy
+ * Updated: 6/3/2020
  * Resources: 
  * https://www.youtube.com/watch?v=64NblGkAabk
  * https://www.youtube.com/watch?v=wbpMiKiSKm8&list=PLFt_AvWsXl0eBW2EiBtl_sxmDtSgZBxB3
@@ -23,28 +23,47 @@ public class MapGen : MonoBehaviour
     
 
     [SerializeField] private int seed = 0;
+    // changes random output, needs reworking
+
     [SerializeField] private int heightScale = 1;
+    // how tall the hills go
+
     [SerializeField] private int octaves = 3;
+    // how many layers of details do we want
+
     [SerializeField] private float persitance = 2;
-    [SerializeField] private float effect = 1;
-    [SerializeField] private AnimationCurve heightCurve;
+    // how much each effect affects the world
+
+    [SerializeField] private float effect = 3;
+    // how offten an effect accurs in the layer
+
+    [SerializeField] private AnimationCurve heightCurve = null;
+    // height modifies strength by height
+    // time of 1 represents heights at y of 1
+    // setting time of one to value 0 takes the values near y of one and multiplies it by 0
+
     [SerializeField] private bool autoUpdate = false;
+    // will automatily run code 
+
     [SerializeField] private bool debugTools = false;
+    // debugging tools for devs
 
 
-
-
-    List<Vector3> vertices;
-    List<int> triangles;
-    int imgHeight;
-    int imgWidth;
-    int vertCount;
+    private List<Vector3> vertices;
+    // list of verteices for mesh
+    
+    private List<int> triangles;
+    // list of triangle indexes for mesh
+    
+    private int imgHeight;
+    private int imgWidth;
+    
+    private int vertCount;
+    // how many vertices are in the mesh
 
     // Start is called before the first frame update
     void Start()
     {
-        
-
         Generate();
     }
 
@@ -69,7 +88,6 @@ public class MapGen : MonoBehaviour
         // Create Triangles
         triangles = new List<int>();
 
-
         for (int X = 0; X < vertArr.GetLength(0) - 1; X++)
         {
             for (int Z = 0; Z < vertArr.GetLength(1) - 1; Z++)
@@ -88,9 +106,6 @@ public class MapGen : MonoBehaviour
             }
         }
 
-
-
-
         // Create Mesh
         Mesh mesh = new Mesh();
         mesh.vertices = vertices.ToArray();
@@ -103,9 +118,13 @@ public class MapGen : MonoBehaviour
 
     private int[,] CreateVertices(bool[,] vertArr, float[,] noiseMap)
     {
+        // vert index tells us the vertsindex in the vertices list
+        // needed for mesh gen
         this.vertices = new List<Vector3>();
         int[,] vertsIndex = new int[vertArr.GetLength(0), vertArr.GetLength(1)];
 
+        
+        // sets all values in vertIndex to -1
         for (int x = 0; x < vertsIndex.GetLength(0); x++)
         {
             for (int y = 0; y < vertsIndex.GetLength(1); y++)
@@ -114,6 +133,8 @@ public class MapGen : MonoBehaviour
             }
         }
         
+
+        // place vertices in world and array
         for (int y = 0; y < vertArr.GetLength(1); y++)
         {
             for (int x = 0; x < vertArr.GetLength(0); x++)
@@ -134,8 +155,10 @@ public class MapGen : MonoBehaviour
     public bool[,] FindVertices(int imgHeight, int imgWidth)
     {
 
+        // find the location of all vertices baed on image in represntative 2d array
         bool[,] vertTF = new bool[imgHeight + 1, imgWidth + 1];
 
+        // sets all locations to false
         for (int y = 0; y < imgHeight; y++)
         {
             for (int x = 0; x < imgHeight; x++)
@@ -144,7 +167,7 @@ public class MapGen : MonoBehaviour
             }
         }
 
-
+        // all the places to check made iteratable
         int[,] placesToAdd = new int[4, 2]
         {
             {0, 0},
@@ -154,7 +177,7 @@ public class MapGen : MonoBehaviour
         };
 
 
-        
+        // finds all the places that need vertices and saves locations to representaive 2d array
         for(int y = 0; y < imgHeight; y++)
         {
             for (int x = 0; x < imgWidth; x++)
@@ -212,7 +235,8 @@ public class MapGen : MonoBehaviour
                     float PerlinX = (float)X / (float)mapWidth * freq;
                     float PerlinZ = (float)Z / (float)mapHeight * freq;
 
-                    float perlinValue = (Mathf.PerlinNoise(seed + PerlinX,seed + PerlinZ) * 2 - 1) * this.heightScale;
+                    float perlinValue = (Mathf.PerlinNoise(this.seed + PerlinX, this.seed + PerlinZ) * 2 - 1) * this.heightScale;
+                    perlinValue *= this.heightCurve.Evaluate(perlinValue);
 
                     noiseHeight += perlinValue * amp;
 
@@ -236,7 +260,7 @@ public class MapGen : MonoBehaviour
         
         if(this.debugTools)
         {
-            /*
+            
             RaycastHit hit;
      
             // send ray cast to center screen
@@ -290,12 +314,9 @@ public class MapGen : MonoBehaviour
                 Gizmos.DrawLine(showPOS[i + 2], showPOS[i]);
 
             }
-            */
+            
 
         }
     }
-
-
-
 
 }
