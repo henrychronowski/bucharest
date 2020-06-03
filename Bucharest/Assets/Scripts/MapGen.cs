@@ -12,29 +12,39 @@ using System.Collections.Generic;
 using System.Drawing;
 using TreeEditor;
 using UnityEditor;
+using UnityEditor.PackageManager.Requests;
+using UnityEditor.UI;
 using UnityEngine;
 
 public class MapGen : MonoBehaviour
 {
     // properties
-    [SerializeField] private int mapWidth;
-    [SerializeField] private int mapHeight;
-    [SerializeField] private int seed;
-    [SerializeField] private int heightScale;
-    [SerializeField] private int octaves;
-    [SerializeField] private float persitance;
-    [SerializeField] private float effect;
+    [SerializeField] private Sprite sourceImg = null;
+    
+
+    [SerializeField] private int seed = 0;
+    [SerializeField] private int heightScale = 1;
+    [SerializeField] private int octaves = 3;
+    [SerializeField] private float persitance = 2;
+    [SerializeField] private float effect = 1;
     [SerializeField] private AnimationCurve heightCurve;
-    [SerializeField] private bool autoUpdate;
+    [SerializeField] private bool autoUpdate = false;
     [SerializeField] private bool debugTools = false;
 
 
-    Vector3[] vertices;
-    int[] triangles;
+
+
+    List<Vector3> vertices;
+    List<int> triangles;
+    int imgHeight;
+    int imgWidth;
+    int vertCount;
 
     // Start is called before the first frame update
     void Start()
     {
+        
+
         Generate();
     }
 
@@ -46,62 +56,134 @@ public class MapGen : MonoBehaviour
 
     // methods
     Mesh CreateMesh(float[,] NoiseMap)
-    { 
-        // Create Vertices
-        vertices = new Vector3[(this.mapWidth + 1) * (mapHeight + 1)];
-        int i = 0;
-        for (int X = 0; X < mapHeight + 1; X++)
-        {
-            for (int Z = 0; Z < this.mapWidth + 1; Z++)
-            {
-                float vertexHeight = NoiseMap[Z, X] * this.heightCurve.Evaluate(NoiseMap[Z, X]);
-                vertices[i] = new Vector3(Z, vertexHeight, X);
-                i++;
-            }
-        }
+    {
+
+        // freate Vertices Locations
+        bool[,] vertArr = FindVertices(this.imgHeight, this.imgWidth);
+
+
+        // place vertices in world based on vertArr
+        int[,] vertIndexes = CreateVertices(vertArr, NoiseMap);
+        
 
         // Create Triangles
-        triangles = new int[(this.mapWidth) * (mapHeight) * 6];
-
-        int verts = 0;
-        int tris = 0;
+        triangles = new List<int>();
 
 
-        // add triangles by square
-        for (int X = 0; X < this.mapWidth; X++)
+        for (int X = 0; X < vertArr.GetLength(0) - 1; X++)
         {
-            for (int Z = 0; Z < mapHeight; Z++)
+            for (int Z = 0; Z < vertArr.GetLength(1) - 1; Z++)
             {
-                triangles[tris + 0] = verts + 0;
-                triangles[tris + 1] = verts + mapHeight + 1;
-                triangles[tris + 2] = verts + 1;
+                if (sourceImg.texture.GetPixel(X, Z).grayscale > 0)
+                {
+                    triangles.Add(vertIndexes[X, Z]);
+                    triangles.Add(vertIndexes[X, Z + 1]);
+                    triangles.Add(vertIndexes[X + 1, Z]);
 
-                triangles[tris + 3] = verts + 1;
-                triangles[tris + 4] = verts + mapHeight + 1;
-                triangles[tris + 5] = verts + mapHeight + 2;
+                    triangles.Add(vertIndexes[X, Z + 1]);
+                    triangles.Add(vertIndexes[X + 1, Z + 1]);
+                    triangles.Add(vertIndexes[X + 1, Z]);
+                }
 
-                verts++;
-                tris += 6;
             }
-            verts++;
         }
+
+
 
 
         // Create Mesh
         Mesh mesh = new Mesh();
-        mesh.vertices = vertices;
-        mesh.triangles = triangles;
+        mesh.vertices = vertices.ToArray();
+        mesh.triangles = triangles.ToArray();
 
         mesh.RecalculateNormals();
 
         return mesh;
     }
 
+    private int[,] CreateVertices(bool[,] vertArr, float[,] noiseMap)
+    {
+        this.vertices = new List<Vector3>();
+        int[,] vertsIndex = new int[vertArr.GetLength(0), vertArr.GetLength(1)];
+
+        for (int x = 0; x < vertsIndex.GetLength(0); x++)
+        {
+            for (int y = 0; y < vertsIndex.GetLength(1); y++)
+            {
+                vertsIndex[x, y] = -1;
+            }
+        }
+        
+        for (int y = 0; y < vertArr.GetLength(1); y++)
+        {
+            for (int x = 0; x < vertArr.GetLength(0); x++)
+            {
+                if (vertArr[x,y])
+                {
+                    this.vertices.Add(new Vector3(x, noiseMap[x, y], y));
+                    vertsIndex[x, y] = this.vertCount;
+                    this.vertCount++;
+                }
+            }
+        }
+
+        return vertsIndex;
+
+    }
+
+    public bool[,] FindVertices(int imgHeight, int imgWidth)
+    {
+
+        bool[,] vertTF = new bool[imgHeight + 1, imgWidth + 1];
+
+        for (int y = 0; y < imgHeight; y++)
+        {
+            for (int x = 0; x < imgHeight; x++)
+            {
+                vertTF[x, y] = false;
+            }
+        }
+
+
+        int[,] placesToAdd = new int[4, 2]
+        {
+            {0, 0},
+            {1, 0},
+            {1, 1},
+            {0, 1},
+        };
+
+
+        
+        for(int y = 0; y < imgHeight; y++)
+        {
+            for (int x = 0; x < imgWidth; x++)
+            {
+                if (sourceImg.texture.GetPixel(x, y).grayscale > 0)
+                {
+                    for(int k = 0; k < 4; k++)
+                    {
+                        vertTF[x + placesToAdd[k, 0], y + placesToAdd[k, 1]] = true;
+                        
+                    }
+                }
+                
+            }
+        }
+
+        return vertTF;
+
+    }
+
 
     public void Generate()
     {
-        float[,] NoiseMap = GenerateNoiseMaps(this.mapWidth, this.mapHeight);
 
+        imgHeight = sourceImg.texture.height;
+        imgWidth = sourceImg.texture.width;
+        vertCount = 0;
+
+        float[,] NoiseMap = GenerateNoiseMaps(this.imgWidth, this.imgHeight);
         Mesh finalMesh = CreateMesh(NoiseMap);
         GetComponent<MeshFilter>().mesh = finalMesh;
         GetComponent<MeshCollider>().sharedMesh = finalMesh;
@@ -151,8 +233,10 @@ public class MapGen : MonoBehaviour
     
     private void OnDrawGizmos()
     {
+        
         if(this.debugTools)
         {
+            /*
             RaycastHit hit;
      
             // send ray cast to center screen
@@ -206,6 +290,8 @@ public class MapGen : MonoBehaviour
                 Gizmos.DrawLine(showPOS[i + 2], showPOS[i]);
 
             }
+            */
+
         }
     }
 
