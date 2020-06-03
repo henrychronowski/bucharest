@@ -18,6 +18,9 @@ using UnityEngine;
 
 public class MapGen : MonoBehaviour
 {
+
+    public int levelOfDetail;
+
     // properties
     [SerializeField] private Sprite sourceImg = null;
     
@@ -77,30 +80,42 @@ public class MapGen : MonoBehaviour
     Mesh CreateMesh(float[,] NoiseMap)
     {
 
+        int meshSimpificationIncriment = (this.levelOfDetail == 0) ? 1 : this.levelOfDetail * 2;
+
         // freate Vertices Locations
-        bool[,] vertArr = FindVertices(this.imgHeight, this.imgWidth);
+        bool[,] vertArr = FindVertices(this.imgHeight, this.imgWidth, meshSimpificationIncriment);
 
 
         // place vertices in world based on vertArr
-        int[,] vertIndexes = CreateVertices(vertArr, NoiseMap);
+        int[,] vertIndexes = CreateVertices(vertArr, NoiseMap, meshSimpificationIncriment);
         
 
         // Create Triangles
         triangles = new List<int>();
 
-        for (int X = 0; X < vertArr.GetLength(0) - 1; X++)
+        for (int X = 0; X < vertArr.GetLength(0) - meshSimpificationIncriment; X += meshSimpificationIncriment)
         {
-            for (int Z = 0; Z < vertArr.GetLength(1) - 1; Z++)
+            for (int Z = 0; Z < vertArr.GetLength(1) - meshSimpificationIncriment; Z += meshSimpificationIncriment)
             {
                 if (sourceImg.texture.GetPixel(X, Z).grayscale > 0)
                 {
-                    triangles.Add(vertIndexes[X, Z]);
-                    triangles.Add(vertIndexes[X, Z + 1]);
-                    triangles.Add(vertIndexes[X + 1, Z]);
+                    try
+                    {
+                        triangles.Add(vertIndexes[X, Z]);
+                        triangles.Add(vertIndexes[X, Z + meshSimpificationIncriment]);
+                        triangles.Add(vertIndexes[X + meshSimpificationIncriment, Z]);
 
-                    triangles.Add(vertIndexes[X, Z + 1]);
-                    triangles.Add(vertIndexes[X + 1, Z + 1]);
-                    triangles.Add(vertIndexes[X + 1, Z]);
+                        triangles.Add(vertIndexes[X, Z + meshSimpificationIncriment]);
+                        triangles.Add(vertIndexes[X + meshSimpificationIncriment, Z + meshSimpificationIncriment]);
+                        triangles.Add(vertIndexes[X + meshSimpificationIncriment, Z]);
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        Debug.Log(X + " " + Z);
+                    }
+                    
+
+                    
                 }
 
             }
@@ -116,14 +131,17 @@ public class MapGen : MonoBehaviour
         return mesh;
     }
 
-    private int[,] CreateVertices(bool[,] vertArr, float[,] noiseMap)
+    private int[,] CreateVertices(bool[,] vertArr, float[,] noiseMap, int meshSimpificationIncriment)
     {
         // vert index tells us the vertsindex in the vertices list
         // needed for mesh gen
         this.vertices = new List<Vector3>();
         int[,] vertsIndex = new int[vertArr.GetLength(0), vertArr.GetLength(1)];
 
+
         
+
+
         // sets all values in vertIndex to -1
         for (int x = 0; x < vertsIndex.GetLength(0); x++)
         {
@@ -132,12 +150,12 @@ public class MapGen : MonoBehaviour
                 vertsIndex[x, y] = -1;
             }
         }
-        
 
+        Debug.Log(meshSimpificationIncriment);
         // place vertices in world and array
-        for (int y = 0; y < vertArr.GetLength(1); y++)
+        for (int y = 0; y < vertsIndex.GetLength(1); y += meshSimpificationIncriment)
         {
-            for (int x = 0; x < vertArr.GetLength(0); x++)
+            for (int x = 0; x < vertsIndex.GetLength(0); x += meshSimpificationIncriment)
             {
                 if (vertArr[x,y])
                 {
@@ -152,7 +170,7 @@ public class MapGen : MonoBehaviour
 
     }
 
-    public bool[,] FindVertices(int imgHeight, int imgWidth)
+    public bool[,] FindVertices(int imgHeight, int imgWidth, int meshSimpificationIncriment)
     {
 
         // find the location of all vertices baed on image in represntative 2d array
@@ -171,22 +189,29 @@ public class MapGen : MonoBehaviour
         int[,] placesToAdd = new int[4, 2]
         {
             {0, 0},
-            {1, 0},
-            {1, 1},
-            {0, 1},
+            {meshSimpificationIncriment, 0},
+            {meshSimpificationIncriment, meshSimpificationIncriment},
+            {0, meshSimpificationIncriment},
         };
 
 
         // finds all the places that need vertices and saves locations to representaive 2d array
-        for(int y = 0; y < imgHeight; y++)
+        for(int y = 0; y < imgHeight; y += meshSimpificationIncriment)
         {
-            for (int x = 0; x < imgWidth; x++)
+            for (int x = 0; x < imgWidth; x += meshSimpificationIncriment)
             {
                 if (sourceImg.texture.GetPixel(x, y).grayscale > 0)
                 {
                     for(int k = 0; k < 4; k++)
                     {
-                        vertTF[x + placesToAdd[k, 0], y + placesToAdd[k, 1]] = true;
+                        try
+                        {
+                            vertTF[x + placesToAdd[k, 0], y + placesToAdd[k, 1]] = true;
+                        }
+                        catch
+                        {
+                            Debug.Log((x + placesToAdd[k, 0]) + " " + (y + placesToAdd[k, 1]));
+                        }
                         
                     }
                 }
