@@ -63,8 +63,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Editor Scripts\MapGeneratorEditor.cs" />
-    <Compile Include="Assets\Scripts\MapGen.cs" />
+    <Compile Include="Assets\Scripts\Editor Scripts\MapChunkEditor.cs" />
+    <Compile Include="Assets\Scripts\Editor Scripts\MapDistributerEditor.cs" />
+    <Compile Include="Assets\Scripts\MapChunk.cs" />
+    <Compile Include="Assets\Scripts\MapDistributer.cs" />
     <Reference Include="UnityEngine">
       <HintPath>D:/Game Dev/Unity/Unity Editors/2019.3.14f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
