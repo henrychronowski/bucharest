@@ -1,0 +1,58 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+/* Author: Henry Chronowski
+ * Updated: 06/02/2020
+ * Purpose: 3rd-person camera controller with collisions and mouse controls
+ * */
+
+public class CameraController : MonoBehaviour
+{
+	[SerializeField] Transform target;
+	[SerializeField] float minOffset = 1.0f;
+	[SerializeField] float maxOffset = 4.0f;
+	[SerializeField] float damping = 0.0f;
+	[SerializeField] Vector2 xAngle = new Vector2(-75.0f, 0.0f);	//x = min, y = max
+	[SerializeField] Vector2 turnSpeed = new Vector2(4.0f, 4.0f);
+
+	private float rotX = 0.0f;
+	private float offset;
+	private float prevOffset;
+
+	private void Awake()
+	{
+		prevOffset = maxOffset;
+
+		//NB: This line should not be in this file
+		Cursor.lockState = CursorLockMode.Locked;
+	}
+
+	private void LateUpdate()
+	{
+		RaycastHit hit;
+		float y = Input.GetAxis("Mouse X") * turnSpeed.y;
+		rotX += Input.GetAxis("Mouse Y") * turnSpeed.x;
+
+		rotX = Mathf.Clamp(rotX, xAngle.x, xAngle.y);
+		transform.eulerAngles = new Vector3(-rotX, transform.eulerAngles.y + y, transform.eulerAngles.z);
+
+		// Clamps offset to collide with objects
+		if (Physics.Linecast(target.position, transform.position, out hit))
+		{
+			offset = Mathf.Clamp(hit.distance, minOffset, maxOffset);
+		}
+		else
+		{
+			offset = maxOffset;
+		}
+
+		// Lerps the above clamp from the previous to prevent epilepsy
+		offset = Mathf.Lerp(prevOffset, offset, Time.deltaTime * damping);
+
+		transform.position = target.position - (transform.forward * offset);
+		transform.LookAt(target);
+
+		prevOffset = offset;
+	}
+}
