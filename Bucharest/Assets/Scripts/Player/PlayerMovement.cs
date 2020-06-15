@@ -1,14 +1,11 @@
-﻿/*Author(s): Your-Name(s)
+﻿/*Author(s): Chris Foster
  * Updated: 06/2/2020
- * Purpose: A short statement describing the functionality of the script
+ * Purpose: Player movement
  */
-
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -21,17 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-     
         rb = gameObject.GetComponent<Rigidbody>();
-    }
-   
-
-    
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame
@@ -39,8 +26,10 @@ public class PlayerMovement : MonoBehaviour
     {
         moveDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
-        if (moveDir != Vector3.zero)
-            Move(Input.GetKey(KeyCode.LeftShift));
+		if (moveDir != Vector3.zero)
+		{
+			Move(Input.GetKey(KeyCode.LeftShift));
+		}
 
         if (Input.GetKey(KeyCode.Space))
         {
@@ -89,4 +78,3 @@ public class PlayerMovement : MonoBehaviour
     }
 
 }
-

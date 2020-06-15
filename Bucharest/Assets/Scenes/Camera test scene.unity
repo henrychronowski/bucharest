@@ -320,8 +320,8 @@ GameObject:
   - component: {fileID: 870253094}
   - component: {fileID: 870253093}
   - component: {fileID: 870253092}
-  - component: {fileID: 870253091}
   - component: {fileID: 870253096}
+  - component: {fileID: 870253091}
   m_Layer: 0
   m_Name: PlayerCube
   m_TagString: Untagged
@@ -338,11 +338,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 870253090}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f315577b576c2f49913712275b4f901, type: 3}
+  m_Script: {fileID: 11500000, guid: 94f306320986905448f857c969c5eefd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 10
-  turningSpeed: 60
+  jumpForce: 13
+  sprintSpeed: 6
+  speed: 3
+  accelerationRate: 1
 --- !u!65 &870253092
 BoxCollider:
   m_ObjectHideFlags: 0

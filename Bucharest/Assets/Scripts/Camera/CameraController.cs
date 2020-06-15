@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-/* Author: Henry Chronowski
+﻿/* Author: Henry Chronowski
  * Updated: 06/02/2020
  * Purpose: 3rd-person camera controller with collisions and mouse controls
  * */
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
@@ -13,6 +13,7 @@ public class CameraController : MonoBehaviour
 	[SerializeField] float minOffset = 1.0f;
 	[SerializeField] float maxOffset = 4.0f;
 	[SerializeField] float damping = 0.0f;
+	[Tooltip("x = min, y = max")]
 	[SerializeField] Vector2 xAngle = new Vector2(-75.0f, 0.0f);	//x = min, y = max
 	[SerializeField] Vector2 turnSpeed = new Vector2(4.0f, 4.0f);
 
