@@ -1,6 +1,6 @@
 ﻿/*Author(s): Chris Foster
- * Updated: 06/2/2020
- * Purpose: Player movement
+ * Updated: 06/15/2020
+ * Purpose: Player movement including jumping
  */
 
 using System.Collections;
@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float sprintSpeed;
     [SerializeField] private float speed;
     [SerializeField] private float accelerationRate;
+    [SerializeField] private Vector3 raycastStartingLoc;
+    [SerializeField] private float raycastDistance;
     Rigidbody rb;
     Vector3 moveDir;
 
@@ -31,6 +33,9 @@ public class PlayerMovement : MonoBehaviour
 			Move(Input.GetKey(KeyCode.LeftShift));
 		}
 
+        Vector3 loc = transform.position + raycastStartingLoc;
+
+        Debug.DrawLine(loc, loc + Vector3.down * raycastDistance, Color.red, 0.1f);
         if (Input.GetKey(KeyCode.Space))
         {
             Jump();
@@ -74,7 +79,22 @@ public class PlayerMovement : MonoBehaviour
 
     void Jump()
     {
-        rb.AddForce(new Vector3(0, jumpForce, 0));
+        RaycastHit hit;
+
+        Vector3 loc = transform.position + raycastStartingLoc;
+        LayerMask mask = 2;
+
+        Debug.DrawRay(loc, Vector3.down * raycastDistance, Color.red);
+        if (Physics.Raycast(loc, Vector3.down, out hit, raycastDistance, ~mask))
+        {
+            rb.AddForce(new Vector3(0, jumpForce, 0));
+            
+        }
+        else
+        {
+            Debug.Log("Not Touching Ground");
+        }
+        
     }
 
 }
