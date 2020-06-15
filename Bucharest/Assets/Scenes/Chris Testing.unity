@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 60392819}
   - component: {fileID: 60392818}
   - component: {fileID: 60392823}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,6 +158,8 @@ MonoBehaviour:
   sprintSpeed: 6
   speed: 3
   accelerationRate: 1
+  raycastStartingLoc: {x: 0, y: -0.5, z: 0}
+  raycastDistance: 0.24
 --- !u!65 &60392819
 BoxCollider:
   m_ObjectHideFlags: 0
