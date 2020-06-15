@@ -1,6 +1,6 @@
-﻿/*Author(s): Your-Name(s)
- * Updated: 06/2/2020
- * Purpose: A short statement describing the functionality of the script
+﻿/*Author(s): CHris FOster
+ * Updated: 06/15/2020
+ * Purpose: Player movement including jumping
  */
 
 
