@@ -1,5 +1,5 @@
 ﻿/* Author: Henry Chronowski
- * Updated: 06/02/2020
+ * Updated: 06/15/2020
  * Purpose: 3rd-person camera controller with collisions and mouse controls
  * */
 
@@ -10,6 +10,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
 	[SerializeField] Transform target;
+	[SerializeField] float inPlayer = 0.1f;
 	[SerializeField] float minOffset = 1.0f;
 	[SerializeField] float maxOffset = 4.0f;
 	[SerializeField] float damping = 0.0f;
@@ -28,6 +29,10 @@ public class CameraController : MonoBehaviour
 		//NB: This line should not be in this file
 		Cursor.lockState = CursorLockMode.Locked;
 	}
+	private void Update()
+	{
+		Debug.DrawLine(target.position, transform.position, Color.blue, 0.1f);
+	}
 
 	private void LateUpdate()
 	{
@@ -37,6 +42,13 @@ public class CameraController : MonoBehaviour
 
 		rotX = Mathf.Clamp(rotX, xAngle.x, xAngle.y);
 		transform.eulerAngles = new Vector3(-rotX, transform.eulerAngles.y + y, transform.eulerAngles.z);
+		target.Rotate(0, y, 0);
+
+		//Will be used to provide a free-look
+		//if(!Input.GetKey(KeyCode.LeftAlt))
+		//{
+		//	target.Rotate(0, y, 0);
+		//}
 
 		// Clamps offset to collide with objects
 		if (Physics.Linecast(target.position, transform.position, out hit))

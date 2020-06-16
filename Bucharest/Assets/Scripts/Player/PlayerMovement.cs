@@ -23,7 +23,6 @@ public class PlayerMovement : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         moveDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
@@ -44,37 +43,23 @@ public class PlayerMovement : MonoBehaviour
     
     void Move(bool sprinting)
     {
-        Debug.Log(moveDir);
-
         if (sprinting && moveDir.x == 0)
         {
-            if (Mathf.Abs(rb.velocity.x) < sprintSpeed)
+            if (Mathf.Abs(rb.velocity.magnitude) < sprintSpeed)
             {
-                rb.velocity += new Vector3(moveDir.x * accelerationRate, 0, 0);
-            }
-                
-
-            if (Mathf.Abs(rb.velocity.z) < sprintSpeed)
-            {
-                rb.velocity += new Vector3(0, 0, moveDir.z * accelerationRate);
+				rb.velocity += transform.right * moveDir.x * accelerationRate;
+				rb.velocity += transform.forward * moveDir.z * accelerationRate;
             }
                
         }
         else
         {
-            if (Mathf.Abs(rb.velocity.x) < speed)
+            if (Mathf.Abs(rb.velocity.magnitude) < speed)
             {
-                rb.velocity += new Vector3(moveDir.x * accelerationRate, 0, 0);
-            }
-               
-
-            if (Mathf.Abs(rb.velocity.z) < speed)
-            {
-                rb.velocity += new Vector3(0, 0, moveDir.z * accelerationRate);
-            }
-        }
-               
-            
+				rb.velocity += transform.right * moveDir.x * accelerationRate;
+				rb.velocity += transform.forward * moveDir.z * accelerationRate;
+			}
+		}
     }
 
     void Jump()
@@ -89,12 +74,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(new Vector3(0, jumpForce, 0));
             
-        }
-        else
-        {
-            Debug.Log("Not Touching Ground");
-        }
-        
+        }       
     }
 
 }
