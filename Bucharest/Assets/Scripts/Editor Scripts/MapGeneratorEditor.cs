@@ -5,13 +5,18 @@
  * Purpose: interacts Mapgen script with editor
  */
 
+#if UNITY_EDITOR
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(MapGen))]
-public class MapGeneratorEditor : Editor
+
+
+[UnityEditor.CustomEditor(typeof(MapGen))]
+public class MapGeneratorEditor : UnityEditor.Editor
 {
     public override void OnInspectorGUI()
     {
@@ -32,3 +37,5 @@ public class MapGeneratorEditor : Editor
         }
     }
 }
+
+#endif
