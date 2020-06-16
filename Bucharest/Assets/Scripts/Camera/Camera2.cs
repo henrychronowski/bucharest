@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿/* Author: Henry Chronowski
+ * Updated: 06/15/2020
+ * Follows behind the player with damping on rotation and distance
+ * */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-//Follows behind the player with damping on rotation and distance
 
 public class Camera2 : MonoBehaviour
 {

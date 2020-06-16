@@ -1,4 +1,4 @@
-﻿/*Author(s): Chris Foster
+﻿/*Author(s): Chris Foster, Henry Chronowski
  * Updated: 06/15/2020
  * Purpose: Player movement including jumping
  */
@@ -9,6 +9,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+
+	//TODO: add default parameters to make unity stop complaining and make the code more portable -HC
     [SerializeField] private int jumpForce;
     [SerializeField] private float sprintSpeed;
     [SerializeField] private float speed;

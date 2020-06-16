@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿/* Author: Henry Chronowski
+ * Updated: 06/15/2020
+ * Purpose: Follows the player with damping, doesn't follow rotation
+ * */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-//Follows the player with damping, doesn't follow rotation
 
 public class Camera1 : MonoBehaviour
 {

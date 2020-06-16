@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
 	[SerializeField] float maxOffset = 4.0f;
 	[SerializeField] float damping = 0.0f;
 	[Tooltip("x = min, y = max")]
-	[SerializeField] Vector2 xAngle = new Vector2(-75.0f, 0.0f);	//x = min, y = max
+	[SerializeField] Vector2 xAngle = new Vector2(-75.0f, 0.0f);
 	[SerializeField] Vector2 turnSpeed = new Vector2(4.0f, 4.0f);
 
 	private float rotX = 0.0f;
@@ -26,7 +26,7 @@ public class CameraController : MonoBehaviour
 	{
 		prevOffset = maxOffset;
 
-		//NB: This line should not be in this file
+		//NB: This line should not be in this file... game manager?
 		Cursor.lockState = CursorLockMode.Locked;
 	}
 	private void Update()
@@ -45,6 +45,7 @@ public class CameraController : MonoBehaviour
 		target.Rotate(0, y, 0);
 
 		//Will be used to provide a free-look
+		//		Need to include some sort of storage of the original angle + lerp back to it after release
 		//if(!Input.GetKey(KeyCode.LeftAlt))
 		//{
 		//	target.Rotate(0, y, 0);
@@ -54,13 +55,15 @@ public class CameraController : MonoBehaviour
 		if (Physics.Linecast(target.position, transform.position, out hit))
 		{
 			offset = Mathf.Clamp(hit.distance, minOffset, maxOffset);
+
+			//TODO: when going to clip into player, no lerp just immediate to inside player
 		}
 		else
 		{
 			offset = maxOffset;
 		}
 
-		// Lerps the above clamp from the previous to prevent epilepsy
+		// Lerps the above clamp from the previous to prevent epilepsy. This is not a good way to handle this but it hurts otherwise so... fix later
 		offset = Mathf.Lerp(prevOffset, offset, Time.deltaTime * damping);
 
 		transform.position = target.position - (transform.forward * offset);

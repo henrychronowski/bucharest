@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿/* Author: Henry Chronowski
+ * Updated: 06/15/2020
+ * Follows the player at offset with horizontal rotation guided by mouse and no damping
+ * */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-//Follows the player at offset with horizontal rotation guided by mouse and no damping
 
 public class Camera3 : MonoBehaviour
 {
