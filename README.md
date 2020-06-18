@@ -13,15 +13,6 @@ Since the entire team is working in a repository, all members must be mindful of
 
 Communication is very important when using Git as a team. Make sure that you let the team know when you are merging branches, and speak up if you run into a merge conflict. This will help in not overwriting someone else’s work. If you feel that someone else’s work should be changed, make sure that you ask them first. Do not change other people’s code without asking.
 
-Git Master(s)
-
-	-A Git Master is a member of the team that is well-versed and comfortable with using Git in a team setting.
-	-There can be more than one Git Master on a team.
-	-The Git Master is responsible for managing and maintaining the team’s repository.
-	-For this project, the Git Master(s) will handle creating and merging branches, in order to minimize merge conflicts.
-
-	Git Masters for this project: TBD
-
 Overview of Branches
 
 	Master Branch - Branch meant for the finished/polished product. Do not work on the master branch!
@@ -35,9 +26,6 @@ Overview of Branches
 
 			   	These branches are mostly for the programmers or designers to mess around with game features.
 
-			   	If you need a new feature branch to be created,
-					let a Git Master know and they will create one if necessary.
-
 			   	Keep pushing to these branches while a feature is still in progress,
 			   		and make sure that you notify the other programmers/designers in Discord when you are
 			   		going to push and pull from a branch.
@@ -45,8 +33,10 @@ Overview of Branches
 			   	Notifying others when you push and pull will help to avoid merge conflicts.
 			   		It also lets everyone else on the team know what you are working on,
 					and what kind of progress has been made.
+					
+				In order to get a completed feature into the dev branch submit a pull request, modelled after pull 						request #8 for reference, and request reviews from at least 2 other programmers
 
-Once a feature is complete and you are ready to merge, let a Git Master know (preferably through Discord). The Git Master will then handle merging that feature branch into the Dev branch.  
+Once a feature is complete and you are ready to merge there is a two-step process to follow. First, on your personal machine merge the dev branch into your feature branch and resolve any merge conflicts. Once any merge conflicts are resolved, push your branch to the remote and write a pull request describing the feature and your code, using pull request #8 by Alex Waters for reference, and request at least 2 other programmers to review it. If you have trouble setting up or writing a pull request ask around for help.
 
 
 ----------PIPELINE----------
@@ -65,7 +55,7 @@ Updating Your Branch
 
 Basic workflow while on any branch
 
-This is the workflow that everyone will follow while on their own branch. Merging branches will be handled by the Git Master.
+This is the workflow that everyone will follow while on their own branch.
 
 General Workflow
 
@@ -88,7 +78,7 @@ General Workflow
 	4. git push (Pushes files to the remote repository ON YOUR CURRENT BRANCH)
 
 
-Git Master Workflow
+Branch Management Workflow
 
 Branch Naming Conventions:
 
@@ -115,13 +105,16 @@ Merging branches
 
 **Merging branches should only be done once a feature is complete unless the programmers are unified in awareness and agreement.**
 
-	1. Make sure you are on the feature branch that you want to merge
+	1. Make sure you are on the branch that you want to merge into
 	2. Follow steps 1-5 in the General Workflow
-	3. git checkout <branch name>    (Switches to specified branch, most likely will be dev)
-	4. Follow steps 1-4 in updating branches
-	5. git merge <branch you want to merge>
+	3. git checkout <branch name>    (Switch to the feature branch or branch that you want to merge from)
+	4. Again follow steps 1-5 in the General Workflow
+	5. Follow steps 1-4 in updating branches
+	6. git merge <branch you're merging into>
+	7. Fix any merge conflicts
 	6. git status
 	7. git push
+	8. Pull request & review
 
 Example merging test branch into dev:
 
@@ -142,7 +135,7 @@ Example merging test branch into dev:
 	12. git status
 	13. git push
 
-**If you run into merge conflicts let a Git Master know!**
+**If you run into merge conflicts and are having trouble ask for help**
 
 Tagging
 
