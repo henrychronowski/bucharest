@@ -18,6 +18,9 @@ public class CameraController : MonoBehaviour
 	[SerializeField] Vector2 xAngle = new Vector2(-75.0f, 0.0f);
 	[SerializeField] Vector2 turnSpeed = new Vector2(4.0f, 4.0f);
 
+	[Header("Whisker Casts")]
+	[SerializeField] Vector3 interval = new Vector3(0.0f, 30.0f, 0.0f);
+
 	private float rotX = 0.0f;
 	private float offset;
 	private float prevOffset;
@@ -29,14 +32,25 @@ public class CameraController : MonoBehaviour
 		//NB: This line should not be in this file... game manager?
 		Cursor.lockState = CursorLockMode.Locked;
 	}
+
 	private void Update()
 	{
-		Debug.DrawLine(target.position, transform.position, Color.blue, 0.1f);
+		Debug.DrawLine(target.position, transform.position, Color.blue);
+		Debug.DrawLine(target.position, RotatePointAboutPoint(transform.position, target.position, interval), Color.red);
+		Debug.DrawLine(target.position, RotatePointAboutPoint(transform.position, target.position, -1.0f * interval), Color.cyan);
+	}
+
+	private Vector3 RotatePointAboutPoint(Vector3 point, Vector3 pivot, Vector3 angles)
+	{
+		Vector3 dir = point - pivot;
+		dir = Quaternion.Euler(angles) * dir;
+		point = dir + pivot;
+		return point;
 	}
 
 	private void LateUpdate()
 	{
-		RaycastHit hit;
+		RaycastHit centre, left, right;
 		float y = Input.GetAxis("Mouse X") * turnSpeed.y;
 		rotX += Input.GetAxis("Mouse Y") * turnSpeed.x;
 
@@ -51,12 +65,21 @@ public class CameraController : MonoBehaviour
 		//	target.Rotate(0, y, 0);
 		//}
 
-		// Clamps offset to collide with objects
-		if (Physics.Linecast(target.position, transform.position, out hit))
+		// Clamps offset to collide with objects, whisker casts attempt to be proactive with clipping
+		if (Physics.Linecast(target.position, transform.position, out centre))
 		{
-			offset = Mathf.Clamp(hit.distance, minOffset, maxOffset);
+			offset = Mathf.Clamp(centre.distance, minOffset, maxOffset);
 
 			//TODO: when going to clip into player, no lerp just immediate to inside player
+			//False, instead just make the player hitbox large enough that never forced inside player
+		}
+		else if (Physics.Linecast(target.position, RotatePointAboutPoint(transform.position, target.position, interval), out right))
+		{
+			offset = Mathf.Clamp(right.distance, minOffset, maxOffset);
+		}
+		else if (Physics.Linecast(target.position, RotatePointAboutPoint(transform.position, target.position, -1.0f * interval), out left))
+		{
+			offset = Mathf.Clamp(left.distance, minOffset, maxOffset);
 		}
 		else
 		{
