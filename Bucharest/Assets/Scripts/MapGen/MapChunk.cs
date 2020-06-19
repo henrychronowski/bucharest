@@ -16,43 +16,27 @@ public class MapChunk : MonoBehaviour
 {
     
 
-    // properties
-    //[SerializeField] private Sprite sourceImg = null;
-    /*
-    
-
-   
-
-    [SerializeField] private int heightScale = 1;
-    // how tall the hills go
-
-    [SerializeField] private int octaves = 3;
-    // how many layers of details do we want
-
-    [Range(0, 1)]
-    [SerializeField] private float persitance = 2;
-    // how much each effect affects the world
-
-    [SerializeField] private float effect = 3;
-    // how offten an effect accurs in the layer
-
-    [SerializeField] private AnimationCurve heightCurve = null;
-    // height modifies strength by height
-    // time of 1 represents heights at y of 1
-    // setting time of one to value 0 takes the values near y of one and multiplies it by 0
-    */
 
     [SerializeField] private int seed = 0;
     // changes random output, needs reworking
 
     [SerializeField] private int[,] landMap;
+    //a 2d map dpeciting biomes 
+
 
     [SerializeField] private Vector2 location;
+    //where it is in realtion to the whole map based on chunck location
+
 
     [SerializeField] private int chunkSize;
+    //how big each chunk is 
+    // should be 240
+
 
     [Range(0, 6)]
     [SerializeField] private int levelOfDetail;
+    //how detailed the mesh is
+
 
 
 
@@ -71,10 +55,6 @@ public class MapChunk : MonoBehaviour
 
 
     // methods
-
-
-
-    
     Mesh CreateMesh(float[,] NoiseMap, int[,] landMap, int levelOfDetail)
     {
         // determins the level of detail to render at

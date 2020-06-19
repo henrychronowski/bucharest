@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngineInternal;
 
@@ -7,23 +8,43 @@ public class MapDistributer : MonoBehaviour
 {
 
     [SerializeField] private Sprite sourceImg = null;
-    [SerializeField] private Vector2 mapScale = new Vector2(1, 1);
+    
+    //[SerializeField] private Transform viewer = null;
 
-    [SerializeField] private Transform viewer = null;
-    [SerializeField] private static Vector2 viewerPosition;
+    //[SerializeField] private static Vector2 viewerPosition;
 
-    [SerializeField] private int viewerDistance = 5;
-
+    //[SerializeField] private int viewerDistance = 5;
 
     [SerializeField] private bool autoUpdate = false;
     // will automatily run code 
 
-    private bool debugTools = false;
+    [SerializeField] private bool debugTools = false;
     // debugging tools for devs
+
+    [SerializeField] private List<BiomeData> biomeDatas = new List<BiomeData>();
+
+
+
+    private Dictionary<int, BiomeData> biomeLogic = new Dictionary<int, BiomeData>();
+
+    private List<Color> BiomesFound = new List<Color>();
+
+    private Dictionary<Vector2, int[,]> landMaps = new Dictionary<Vector2, int[,]>();
+
+
+
+
+
+    //private List<MapChunk> loadedChuncks = new List<MapChunk>();
+
+
+
+
 
     private const int CHUNK_SIZE = 240;
 
-    private List<MapChunk> loadedChuncks = new List<MapChunk>();
+    private int chuncksTall, chuncksLong;
+
 
 
 
@@ -33,15 +54,20 @@ public class MapDistributer : MonoBehaviour
         return this.autoUpdate;
     }
 
-    public void CreateMap()
+    public void CreateMapData()
     {
+        biomeDatas.Clear();
+        BiomesFound.Clear();
+        biomeLogic.Clear();
+        landMaps.Clear();
+
         // get map size
-        int mapHeight = Mathf.CeilToInt(sourceImg.texture.height * mapScale[0]);
-        int mapWidth = Mathf.CeilToInt(sourceImg.texture.width * mapScale[1]);
+        int mapHeight = Mathf.CeilToInt(sourceImg.texture.height);
+        int mapWidth = Mathf.CeilToInt(sourceImg.texture.width);
 
         // based on image dementions how many chucks will we need
-        int chuncksTall = mapHeight / CHUNK_SIZE;
-        int chuncksLong = mapWidth / CHUNK_SIZE;
+        chuncksTall = mapHeight / CHUNK_SIZE;
+        chuncksLong = mapWidth / CHUNK_SIZE;
 
 
         if (mapHeight % CHUNK_SIZE > 0)
@@ -55,12 +81,7 @@ public class MapDistributer : MonoBehaviour
 
 
         // load chunks
-        MapChunk mapChunckPrefab = Resources.Load<MapChunk>("MapChunk") as MapChunk;
-        Dictionary<int, BiomeData> biomeLogic = new Dictionary<int, BiomeData>();
-        List<Color> BiomesFound = new List<Color>();
 
-        BiomesFound.Add(new Color(0, 0, 0));
-        biomeLogic.Add(0, new BiomeData(4, 1, 3, 3, AnimationCurve.Linear(1, 1, 1, 1)));
 
         int octs = 4;
         float percs = 1f;
@@ -117,11 +138,12 @@ public class MapDistributer : MonoBehaviour
                         // get the pixel color
                         Color pixelColor = this.sourceImg.texture.GetPixel(imageX, imageY);
 
+
                         // determin if it is a new biome
                         bool newBiome = true;
                         for(int i = 0; i < BiomesFound.Count; i++)
                         {
-                            if (RGBequal(pixelColor, BiomesFound[i]))
+                            if (RGBequal(pixelColor, BiomesFound[i], 1f))
                             {
                                 newBiome = false;
                             }
@@ -140,49 +162,69 @@ public class MapDistributer : MonoBehaviour
                         landMap[chunkX, chunkY] = BiomesFound.IndexOf(pixelColor);
 
 
-
-
-                        
-
-
-
                         //check to see if the biome has gen data already, if not create it
-                        if (!biomeLogic.ContainsKey(landMap[chunkX, chunkY]))
+                        if (newBiome)
                         {
-                            Debug.Log(octs + " " + percs + " " + effect + " " + heightScale);
-                            biomeLogic.Add(landMap[chunkX, chunkY], new BiomeData(octs, percs, effect, heightScale, AnimationCurve.Linear(1, 1, 1, 1)));
 
-                            octs *= 1;
-                            percs *= 2f;
-                            effect *= 1;
-                            heightScale *= 2;
+                            BiomeData biome = new BiomeData(octs, percs, effect, heightScale, AnimationCurve.Linear(1, 1, 1, 1));
+                            
+                            //for unity editor
+                            biomeDatas.Add(biome);
+
+                            //for map gen
+                            biomeLogic.Add(landMap[chunkX, chunkY], biome);
 
                         }
                     }
 
                 }
+                // save land map
+                landMaps.Add(new Vector2(x, y), landMap);
+                
+            }
+        }
+        Debug.Log(BiomesFound.Count);
+        Debug.Log(biomeLogic.Count);
+    }
 
 
-                //can be broken out for better rendering
-                // generate map
+    bool RGBequal(Color c1, Color c2, float threshHold)
+    {
+        return (
+                (Mathf.Abs(c1.r - c2.r) < threshHold) &&
+                (Mathf.Abs(c1.g - c2.g) < threshHold) && 
+                (Mathf.Abs(c1.b - c2.b) < threshHold)
+                );
+    }
+
+
+
+    public void GenerateMap()
+    {
+        MapChunk mapChunckPrefab = Resources.Load<MapChunk>("MapChunk") as MapChunk;
+
+        
+
+        for (int biomeIdentifier = 0; biomeIdentifier < biomeDatas.Count; biomeIdentifier++)
+        {
+            biomeLogic[biomeIdentifier] = biomeDatas.ElementAt(biomeIdentifier);
+        }
+
+
+        
+
+        for (int y = 0; y < chuncksTall; y++)
+        {
+            for (int x = 0; x < chuncksLong; x++)
+            {
                 MapChunk mapChunck = GameObject.Instantiate(mapChunckPrefab, new Vector3(x * CHUNK_SIZE, 0, y * CHUNK_SIZE), transform.rotation, this.transform);
-                mapChunck.GetComponent<MapChunk>().Generate(landMap, new Vector2(x, y), biomeLogic, 1, 10, CHUNK_SIZE);
-
+                mapChunck.GetComponent<MapChunk>().Generate(landMaps[new Vector2(x,y)], new Vector2(x, y), biomeLogic, 0, 10, CHUNK_SIZE);
             }
         }
 
 
-        Debug.Log(BiomesFound.Count);
 
     }
-
-
-    bool RGBequal(Color c1, Color c2)
-    {
-        return c1.r == c2.r && c1.g == c2.g && c1.b == c2.b;
-    }
-
-
 
 
 

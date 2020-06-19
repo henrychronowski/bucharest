@@ -20,15 +20,26 @@ public class MapDistributerEditor : Editor
         {
             if (mapDistributer.GetAutoUpdate())
             {
-                mapDistributer.CreateMap();
+                mapDistributer.CreateMapData();
             }
         }
 
 
 
-        if (GUILayout.Button("Create Map"))
+        if (GUILayout.Button("Create Map Data"))
         {
-            mapDistributer.CreateMap();
+            mapDistributer.CreateMapData();
+            
         }
+
+
+
+        if (GUILayout.Button("Generate Map"))
+        {
+            mapDistributer.GenerateMap();
+
+        }
+
+        
     }
 }

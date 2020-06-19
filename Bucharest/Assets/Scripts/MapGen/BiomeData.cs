@@ -1,22 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class BiomeData { 
+[Serializable]
+public struct BiomeData {
 
-    public int octaves;
+    [SerializeField] public int octaves;
 
-    public float persitance;
+    [SerializeField] public float persitance;
 
-    public float effect;
+    [SerializeField] public float effect;
 
-    public int heightScale;
+    [SerializeField] public int heightScale;
 
-    public AnimationCurve heightCurve;
+    [SerializeField] public AnimationCurve heightCurve;
 
-    public int levelOfDetail;
-
-    public int seed;
 
     public BiomeData(int octaves, float persitance, float effect, int heightScale, AnimationCurve heightCurve)
     {
