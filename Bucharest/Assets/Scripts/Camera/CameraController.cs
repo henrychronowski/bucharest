@@ -94,7 +94,10 @@ public class CameraController : MonoBehaviour
 		}
 		else if(Physics.Linecast(transform.position, transform.position - new Vector3(0.0f, xMin, 0.0f), out down))
 		{
-
+			if(!ignore.Contains(down.transform.gameObject.tag))
+			{
+				offset = Mathf.Clamp((down.distance / xMin) * maxOffset, minOffset, maxOffset);
+			}
 		}
 
 		// Lerps the above clamp from the previous to prevent epilepsy. This is not a good way to handle this but it hurts otherwise so... fix later
