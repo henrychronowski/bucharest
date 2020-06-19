@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Sprint thingies/firstExample.unity
+    guid: 6e5863800a2557f4cb4d7aedb7bf08f9
   m_configObjects: {}
