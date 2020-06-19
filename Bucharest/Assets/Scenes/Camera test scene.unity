@@ -449,7 +449,6 @@ GameObject:
   - component: {fileID: 1023131209}
   - component: {fileID: 1023131208}
   - component: {fileID: 1023131215}
-  - component: {fileID: 1023131211}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -522,19 +521,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &1023131211
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1023131207}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.36
-  m_Center: {x: 0, y: 0, z: 0.3}
 --- !u!114 &1023131215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -548,7 +534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 870253095}
-  inPlayer: 0.1
+  ncp: 0
   minOffset: 1
   maxOffset: 4
   damping: 10

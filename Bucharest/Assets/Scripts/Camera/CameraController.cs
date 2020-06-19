@@ -10,13 +10,14 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
 	[SerializeField] Transform target;
-	[SerializeField] float inPlayer = 0.1f;
+	[SerializeField] float ncp = 0.1f;
 	[SerializeField] float minOffset = 1.0f;
 	[SerializeField] float maxOffset = 4.0f;
 	[SerializeField] float damping = 0.0f;
 	[Tooltip("x = min, y = max")]
 	[SerializeField] Vector2 xAngle = new Vector2(-75.0f, 0.0f);
 	[SerializeField] Vector2 turnSpeed = new Vector2(4.0f, 4.0f);
+	[SerializeField] float xMin = 1.0f;
 
 	[Header("Whisker Casts")]
 	[SerializeField] Vector3 interval = new Vector3(0.0f, 30.0f, 0.0f);
@@ -39,6 +40,7 @@ public class CameraController : MonoBehaviour
 		Debug.DrawLine(target.position, transform.position, Color.blue);
 		Debug.DrawLine(target.position, RotatePointAboutPoint(transform.position, target.position, interval), Color.red);
 		Debug.DrawLine(target.position, RotatePointAboutPoint(transform.position, target.position, -1.0f * interval), Color.cyan);
+		Debug.DrawLine(transform.position, transform.position - new Vector3(0.0f, xMin, 0.0f), Color.black);
 	}
 
 	private Vector3 RotatePointAboutPoint(Vector3 point, Vector3 pivot, Vector3 angles)
@@ -51,7 +53,7 @@ public class CameraController : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		RaycastHit centre, left, right;
+		RaycastHit centre, left, right, down;
 		float y = Input.GetAxis("Mouse X") * turnSpeed.y;
 		rotX += Input.GetAxis("Mouse Y") * turnSpeed.x;
 
@@ -67,24 +69,32 @@ public class CameraController : MonoBehaviour
 		//}
 
 		// Clamps offset to collide with objects, whisker casts attempt to be proactive with clipping
-		if (Physics.Linecast(target.position, transform.position, out centre) && !ignore.Contains(centre.transform.gameObject.tag))
-		{
-			offset = Mathf.Clamp(centre.distance, minOffset, maxOffset);
+		offset = maxOffset;
 
-			//TODO: when going to clip into player, no lerp just immediate to inside player
-			//False, instead just make the player hitbox large enough that never forced inside player
-		}
-		else if (Physics.Linecast(target.position, RotatePointAboutPoint(transform.position, target.position, interval), out right) && !ignore.Contains(centre.transform.gameObject.tag))
+		if (Physics.Linecast(target.position, transform.position, out centre))
 		{
-			offset = Mathf.Clamp(right.distance, minOffset, maxOffset);
+			if (!ignore.Contains(centre.transform.gameObject.tag))
+			{
+				offset = Mathf.Clamp(centre.distance - ncp, minOffset, maxOffset);
+			}
 		}
-		else if (Physics.Linecast(target.position, RotatePointAboutPoint(transform.position, target.position, -1.0f * interval), out left) && !ignore.Contains(centre.transform.gameObject.tag))
+		else if (Physics.Linecast(target.position, RotatePointAboutPoint(transform.position, target.position, interval), out right))
 		{
-			offset = Mathf.Clamp(left.distance, minOffset, maxOffset);
+			if (!ignore.Contains(right.transform.gameObject.tag))
+			{
+				offset = Mathf.Clamp(right.distance - ncp, minOffset, maxOffset);
+			}
 		}
-		else
+		else if (Physics.Linecast(target.position, RotatePointAboutPoint(transform.position, target.position, -1.0f * interval), out left))
 		{
-			offset = maxOffset;
+			if (!ignore.Contains(left.transform.gameObject.tag))
+			{
+				offset = Mathf.Clamp(left.distance - ncp, minOffset, maxOffset);
+			}
+		}
+		else if(Physics.Linecast(transform.position, transform.position - new Vector3(0.0f, xMin, 0.0f), out down))
+		{
+
 		}
 
 		// Lerps the above clamp from the previous to prevent epilepsy. This is not a good way to handle this but it hurts otherwise so... fix later
