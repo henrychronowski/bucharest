@@ -20,7 +20,8 @@ public class CameraController : MonoBehaviour
 
 	[Header("Whisker Casts")]
 	[SerializeField] Vector3 interval = new Vector3(0.0f, 30.0f, 0.0f);
-
+	[SerializeField] List<string> ignore = new List<string>();	//TODO: add a default "MainCamera" item
+	
 	private float rotX = 0.0f;
 	private float offset;
 	private float prevOffset;
@@ -66,18 +67,18 @@ public class CameraController : MonoBehaviour
 		//}
 
 		// Clamps offset to collide with objects, whisker casts attempt to be proactive with clipping
-		if (Physics.Linecast(target.position, transform.position, out centre))
+		if (Physics.Linecast(target.position, transform.position, out centre) && !ignore.Contains(centre.transform.gameObject.tag))
 		{
 			offset = Mathf.Clamp(centre.distance, minOffset, maxOffset);
 
 			//TODO: when going to clip into player, no lerp just immediate to inside player
 			//False, instead just make the player hitbox large enough that never forced inside player
 		}
-		else if (Physics.Linecast(target.position, RotatePointAboutPoint(transform.position, target.position, interval), out right))
+		else if (Physics.Linecast(target.position, RotatePointAboutPoint(transform.position, target.position, interval), out right) && !ignore.Contains(centre.transform.gameObject.tag))
 		{
 			offset = Mathf.Clamp(right.distance, minOffset, maxOffset);
 		}
-		else if (Physics.Linecast(target.position, RotatePointAboutPoint(transform.position, target.position, -1.0f * interval), out left))
+		else if (Physics.Linecast(target.position, RotatePointAboutPoint(transform.position, target.position, -1.0f * interval), out left) && !ignore.Contains(centre.transform.gameObject.tag))
 		{
 			offset = Mathf.Clamp(left.distance, minOffset, maxOffset);
 		}
