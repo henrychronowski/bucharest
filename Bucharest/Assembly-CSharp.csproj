@@ -69,9 +69,12 @@
     <Compile Include="Assets\Scripts\Camera\Camera3.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraWatch.cs" />
+    <Compile Include="Assets\Scripts\Camera\MinimapCameraController.cs" />
     <Compile Include="Assets\Scripts\Editor Scripts\MapGeneratorEditor.cs" />
     <Compile Include="Assets\Scripts\MapGen.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
+    <None Include="Assets\Shaders\MiniMapUnlit.shader" />
+    <None Include="Assets\Shaders\MiniMapShader.shader" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
