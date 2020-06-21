@@ -253,69 +253,69 @@ public class MapGen : MonoBehaviour
     // debug tools
     #if UNITY_EDITOR
 
-    private void OnDrawGizmos()
-    {
+    //private void OnDrawGizmos()
+    //{
         
-        if(this.debugTools)
-        {
+    //    if(this.debugTools)
+    //    {
             
-            RaycastHit hit;
+    //        RaycastHit hit;
      
-            // send ray cast to center screen
-            if (!Physics.Raycast(SceneView.currentDrawingSceneView.camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out hit))
-                return;
+    //        // send ray cast to center screen
+    //        if (!Physics.Raycast(SceneView.currentDrawingSceneView.camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out hit))
+    //            return;
 
-            // make sure we hit some mesh
-            MeshCollider meshCollider = hit.collider as MeshCollider;
-            if (meshCollider == null || meshCollider.sharedMesh == null)
-                return;
+    //        // make sure we hit some mesh
+    //        MeshCollider meshCollider = hit.collider as MeshCollider;
+    //        if (meshCollider == null || meshCollider.sharedMesh == null)
+    //            return;
 
-            // get containers set up
-            Mesh mesh = meshCollider.sharedMesh;
-            Vector3[] vertices = mesh.vertices;
-            int[] triangles = mesh.triangles;
+    //        // get containers set up
+    //        Mesh mesh = meshCollider.sharedMesh;
+    //        Vector3[] vertices = mesh.vertices;
+    //        int[] triangles = mesh.triangles;
 
-            List<Vector3> showPOS = new List<Vector3>();
-            List<int> showPOSindex = new List<int>();
+    //        List<Vector3> showPOS = new List<Vector3>();
+    //        List<int> showPOSindex = new List<int>();
 
-            // add triangles to show based on hit triangle
-            for (int i = 0; i < 3; i++)
-            {
-                //init triangle
-                showPOS.Add(vertices[triangles[hit.triangleIndex * 3 + i]]);
-                showPOSindex.Add(triangles[hit.triangleIndex * 3 + i]);
+    //        // add triangles to show based on hit triangle
+    //        for (int i = 0; i < 3; i++)
+    //        {
+    //            //init triangle
+    //            showPOS.Add(vertices[triangles[hit.triangleIndex * 3 + i]]);
+    //            showPOSindex.Add(triangles[hit.triangleIndex * 3 + i]);
 
-                showPOS.Add(vertices[triangles[hit.triangleIndex * 3 + i]]);
-                showPOSindex.Add(triangles[hit.triangleIndex * 3 + i]);
+    //            showPOS.Add(vertices[triangles[hit.triangleIndex * 3 + i]]);
+    //            showPOSindex.Add(triangles[hit.triangleIndex * 3 + i]);
 
-            }
-
-
-            // get location that was hit
-            Transform hitTransform = hit.collider.transform;
+    //        }
 
 
-            // draw spehere, text, and alighn point
-            for (int i = 0; i < showPOS.Count; i++)
-            {
-                showPOS[i] = hitTransform.TransformPoint(showPOS[i]);
-                Gizmos.DrawSphere(showPOS[i], .1f);
-                Handles.Label(showPOS[i], (showPOS[i].x + "-" + showPOS[i].z + "-" + showPOSindex[i]));
-            }
+    //        // get location that was hit
+    //        Transform hitTransform = hit.collider.transform;
 
 
-            // draw lines
-            for (int i = 0; i < showPOS.Count; i += 3)
-            {
-                Gizmos.DrawLine(showPOS[i], showPOS[i + 1]);
-                Gizmos.DrawLine(showPOS[i + 1], showPOS[i + 2]);
-                Gizmos.DrawLine(showPOS[i + 2], showPOS[i]);
+    //        // draw spehere, text, and alighn point
+    //        for (int i = 0; i < showPOS.Count; i++)
+    //        {
+    //            showPOS[i] = hitTransform.TransformPoint(showPOS[i]);
+    //            Gizmos.DrawSphere(showPOS[i], .1f);
+    //            Handles.Label(showPOS[i], (showPOS[i].x + "-" + showPOS[i].z + "-" + showPOSindex[i]));
+    //        }
 
-            }
+
+    //        // draw lines
+    //        for (int i = 0; i < showPOS.Count; i += 3)
+    //        {
+    //            Gizmos.DrawLine(showPOS[i], showPOS[i + 1]);
+    //            Gizmos.DrawLine(showPOS[i + 1], showPOS[i + 2]);
+    //            Gizmos.DrawLine(showPOS[i + 2], showPOS[i]);
+
+    //        }
             
 
-        }
-    }
+    //    }
+    //}
     #endif
 
 }
