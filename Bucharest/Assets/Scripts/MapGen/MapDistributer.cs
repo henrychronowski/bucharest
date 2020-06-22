@@ -4,6 +4,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngineInternal;
 
+using System.Threading;
+
+
+
 public class MapDistributer : MonoBehaviour
 {
 
@@ -35,16 +39,9 @@ public class MapDistributer : MonoBehaviour
 
 
 
-    //private List<MapChunk> loadedChuncks = new List<MapChunk>();
-
-
-
-
-
     private const int CHUNK_SIZE = 240;
 
     private int chuncksTall, chuncksLong;
-
 
 
 
@@ -157,12 +154,19 @@ public class MapDistributer : MonoBehaviour
                             BiomesFound.Add(pixelColor);
                         }
 
-
+                        // this and the previous loops may be better optimzed somehow but it works
+                        
                         // get the index of the biome and store it at the location in the biome map keeping track of biomes
-                        landMap[chunkX, chunkY] = BiomesFound.IndexOf(pixelColor);
+                        for (int i = 0; i < BiomesFound.Count; i++)
+                        {
+                            if (RGBequal(pixelColor, BiomesFound[i], 1f))
+                            {
+                                landMap[chunkX, chunkY] = i;
+                            }
+                        }
 
 
-                        //check to see if the biome has gen data already, if not create it
+                        // create biome data
                         if (newBiome)
                         {
 
@@ -211,22 +215,16 @@ public class MapDistributer : MonoBehaviour
         }
 
 
-        
-
         for (int y = 0; y < chuncksTall; y++)
         {
             for (int x = 0; x < chuncksLong; x++)
             {
                 MapChunk mapChunck = GameObject.Instantiate(mapChunckPrefab, new Vector3(x * CHUNK_SIZE, 0, y * CHUNK_SIZE), transform.rotation, this.transform);
-                mapChunck.GetComponent<MapChunk>().Generate(landMaps[new Vector2(x,y)], new Vector2(x, y), biomeLogic, 0, 10, CHUNK_SIZE);
+                mapChunck.GetComponent<MapChunk>().Generate(landMaps[new Vector2(x, y)], new Vector2(x, y), biomeLogic, 0, 10, CHUNK_SIZE);
             }
         }
 
-
-
     }
-
-
 
     /*
     // debug tools

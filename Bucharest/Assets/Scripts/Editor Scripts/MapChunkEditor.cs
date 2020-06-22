@@ -20,10 +20,6 @@ public class MapGeneratorEditor : Editor
     {
         MapChunk mapGen = (MapChunk)target;
         DrawDefaultInspector();
-        if (GUILayout.Button("Generate"))
-        {
-            mapGen.Generate();
-        }
     }
 }
 

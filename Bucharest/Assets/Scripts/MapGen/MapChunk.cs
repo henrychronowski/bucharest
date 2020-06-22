@@ -14,24 +14,18 @@ using UnityEngine;
 
 public class MapChunk : MonoBehaviour
 {
-    
-
-
     [SerializeField] private int seed = 0;
     // changes random output, needs reworking
 
     [SerializeField] private int[,] landMap;
     //a 2d map dpeciting biomes 
 
-
     [SerializeField] private Vector2 location;
     //where it is in realtion to the whole map based on chunck location
-
 
     [SerializeField] private int chunkSize;
     //how big each chunk is 
     // should be 240
-
 
     [Range(0, 6)]
     [SerializeField] private int levelOfDetail;
@@ -43,9 +37,6 @@ public class MapChunk : MonoBehaviour
     private List<Vector3> vertices;
     // list of verteices for mesh
     
-    private List<int> triangles;
-    // list of triangle indexes for mesh
-    
     private int vertCount;
     // how many vertices are in the mesh
 
@@ -54,7 +45,42 @@ public class MapChunk : MonoBehaviour
     // gets and setters 
 
 
+    /*none*/
+
+
+
+
     // methods
+
+    private Vector3[] CalculateNormals(List<int> triangles)
+    {
+        Vector3[] vertexNormals = new Vector3[this.vertices.Count];
+        int trianglesCount = triangles.Count/3;
+        for(int i = 0; i < trianglesCount; i++)
+        {
+            int normalTriangleIndex = i * 3;
+            int vertexIndexA = triangles[normalTriangleIndex];
+            int vertexIndexB = triangles[normalTriangleIndex + 1];
+            int vertexIndexC = triangles[normalTriangleIndex + 2];
+
+            Vector3 triangleNormal = SurfaceNormalFromIndices(vertexIndexA, vertexIndexB, vertexIndexC);
+
+            vertexNormals[vertexIndexA] += triangleNormal;
+            vertexNormals[vertexIndexB] += triangleNormal;
+            vertexNormals[vertexIndexC] += triangleNormal;
+        }
+
+        for(int i = 0; i < vertexNormals.Length; i++)
+        {
+            vertexNormals[i].Normalize();
+        }
+
+
+        return vertexNormals;
+    }
+
+
+
     Mesh CreateMesh(float[,] NoiseMap, int[,] landMap, int levelOfDetail)
     {
         // determins the level of detail to render at
@@ -63,19 +89,35 @@ public class MapChunk : MonoBehaviour
         // create Vertices Locations
         bool[,] vertArr = FindVertices(landMap, meshSimpificationIncriment);
 
-
         // place vertices in world based on vertArr
         int[,] vertIndexes = CreateVertices(vertArr, NoiseMap, meshSimpificationIncriment);
-        
 
         // Create Triangles
-        triangles = new List<int>();
+        List<int> triangles = CreateTriangles(vertArr, vertIndexes, meshSimpificationIncriment);
+
+
+        // Create Mesh
+        Mesh mesh = new Mesh();
+        mesh.vertices = vertices.ToArray();
+        mesh.triangles = triangles.ToArray();
+       
+        //math that needs to change to dislove seames
+        mesh.normals = CalculateNormals(triangles);
+
+        return mesh;
+    }
+
+
+    private List<int> CreateTriangles(bool[,] vertArr, int[,] vertIndexes, int meshSimpificationIncriment)
+    {
+        // kill me
+        List<int> triangles = new List<int>();
 
         for (int X = 0; X < vertArr.GetLength(0) - meshSimpificationIncriment; X += meshSimpificationIncriment)
         {
             for (int Z = 0; Z < vertArr.GetLength(1) - meshSimpificationIncriment; Z += meshSimpificationIncriment)
             {
-                if (landMap[X, Z] != 0) 
+                if (landMap[X, Z] != 0)
                 {
                     triangles.Add(vertIndexes[X, Z]);
                     triangles.Add(vertIndexes[X, Z + meshSimpificationIncriment]);
@@ -85,21 +127,15 @@ public class MapChunk : MonoBehaviour
                     triangles.Add(vertIndexes[X + meshSimpificationIncriment, Z + meshSimpificationIncriment]);
                     triangles.Add(vertIndexes[X + meshSimpificationIncriment, Z]);
 
-                    
                 }
 
             }
         }
 
-        // Create Mesh
-        Mesh mesh = new Mesh();
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
+        return triangles;
 
-        mesh.RecalculateNormals();
-
-        return mesh;
     }
+
 
     private int[,] CreateVertices(bool[,] vertArr, float[,] noiseMap, int meshSimpificationIncriment)
     {
@@ -111,8 +147,6 @@ public class MapChunk : MonoBehaviour
 
 
         
-
-
         // sets all values in vertIndex to -1
         for (int x = 0; x < vertsIndex.GetLength(0); x++)
         {
@@ -140,6 +174,11 @@ public class MapChunk : MonoBehaviour
         return vertsIndex;
 
     }
+
+
+
+
+
 
     private bool[,] FindVertices(int[,] landMap, int meshSimpificationIncriment)
     {
@@ -173,7 +212,6 @@ public class MapChunk : MonoBehaviour
             {
                 if (landMap[x, y] != 0)
                 {
-                    //Debug.Log(landMap[x, y].r + " " + landMap[x, y].g + " " + landMap[x, y].b);
                     for(int k = 0; k < 4; k++)
                     {
                         vertTF[x + placesToAdd[k, 0], y + placesToAdd[k, 1]] = true;   
@@ -188,11 +226,6 @@ public class MapChunk : MonoBehaviour
     }
 
 
-    public void Start()
-    {
-        Generate();
-    }
-
     public void Generate(int[,] landMap, Vector2 location, Dictionary<int, BiomeData> biomeLogic, int lod, int seed, int chunkSize)
     {
         
@@ -201,12 +234,8 @@ public class MapChunk : MonoBehaviour
         this.levelOfDetail = lod;
         this.seed = seed;
         this.chunkSize = chunkSize;
-        
 
-        //this.imgWidth = sourceImg.texture.width;
-        //this.imgHeight = sourceImg.texture.height;
-
-        vertCount = 0;
+        this.vertCount = 0;
         
         float[,] NoiseMap = GenerateNoiseMaps(location, landMap, biomeLogic);
         
@@ -217,20 +246,6 @@ public class MapChunk : MonoBehaviour
         GetComponent<MeshFilter>().mesh = finalMesh;
         GetComponent<MeshCollider>().sharedMesh = finalMesh;
     }
-
-    public void Generate()
-    {
-        //this.imgWidth = sourceImg.texture.width;
-        //this.imgHeight = sourceImg.texture.height;
-
-        vertCount = 0;
-
-        //float[,] NoiseMap = GenerateNoiseMaps(this.imgWidth, this.imgHeight);
-        //Mesh finalMesh = CreateMesh(NoiseMap, this.levelOfDetail);
-        //GetComponent<MeshFilter>().mesh = finalMesh;
-        //GetComponent<MeshCollider>().sharedMesh = finalMesh;
-    }
-
 
     private float[,] GenerateNoiseMaps(Vector2 location, int[,] landMap, Dictionary<int, BiomeData> biomeLogic)
     {
@@ -275,10 +290,22 @@ public class MapChunk : MonoBehaviour
 
 
 
-    bool RGBequal(Color c1, Color c2)
+    Vector3 SurfaceNormalFromIndices(int indexA, int indexB, int indexC)
     {
-        return c1.r == c2.r && c1.g == c2.g && c1.b == c2.b;
+        Vector3 pointA = this.vertices[indexA];
+        Vector3 pointB = this.vertices[indexB];
+        Vector3 pointC = this.vertices[indexC];
+
+        Vector3 sideAB = pointB - pointA;
+        Vector3 sideAC = pointC - pointA;
+
+        return Vector3.Cross(sideAB, sideAC).normalized;
+
+
     }
+
+
+
 }
 
 
