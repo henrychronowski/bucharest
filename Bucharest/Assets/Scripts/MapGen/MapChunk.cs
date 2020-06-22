@@ -95,18 +95,40 @@ public class MapChunk : MonoBehaviour
         // Create Triangles
         List<int> triangles = CreateTriangles(vertArr, vertIndexes, meshSimpificationIncriment);
 
+        //create UV
+        
+
 
         // Create Mesh
         Mesh mesh = new Mesh();
-        mesh.vertices = vertices.ToArray();
+        mesh.vertices = this.vertices.ToArray();
         mesh.triangles = triangles.ToArray();
-       
+        mesh.uv = getUVs(vertIndexes, vertArr, meshSimpificationIncriment);
+
         //math that needs to change to dislove seames
         mesh.normals = CalculateNormals(triangles);
 
         return mesh;
     }
 
+    private Vector2[] getUVs(int[,] vertsIndex, bool[,] vertArr, int meshSimpificationIncriment)
+    {
+
+        List<Vector2> uv = new List<Vector2>();
+
+        for (int y = 0; y < vertsIndex.GetLength(1); y += meshSimpificationIncriment)
+        {
+            for (int x = 0; x < vertsIndex.GetLength(0); x += meshSimpificationIncriment)
+            {
+                if (vertArr[x, y])
+                {
+                    uv.Add(new Vector2(x / (float)vertsIndex.GetLength(0), y / (float)vertsIndex.GetLength(1)));
+                }
+            }
+        }
+
+        return uv.ToArray();
+    }
 
     private List<int> CreateTriangles(bool[,] vertArr, int[,] vertIndexes, int meshSimpificationIncriment)
     {

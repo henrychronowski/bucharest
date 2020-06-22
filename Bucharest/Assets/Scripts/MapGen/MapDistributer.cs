@@ -17,6 +17,8 @@ public class MapDistributer : MonoBehaviour
 
     [SerializeField] private float biomeThreshHold = 0.5f;
 
+    [SerializeField] private Material mapTexture = null;
+
     //[SerializeField] private Transform viewer = null;
 
     //[SerializeField] private static Vector2 viewerPosition;
@@ -230,7 +232,8 @@ public class MapDistributer : MonoBehaviour
             for (int x = 0; x < chuncksLong; x++)
             {
                 MapChunk mapChunck = GameObject.Instantiate(mapChunckPrefab, new Vector3(x * CHUNK_SIZE, 0, y * CHUNK_SIZE), transform.rotation, this.transform);
-                mapChunck.GetComponent<MapChunk>().Generate(landMaps[new Vector2(x, y)], new Vector2(x, y), biomeLogic, 6, 10, CHUNK_SIZE);
+                mapChunck.GetComponent<MapChunk>().Generate(landMaps[new Vector2(x, y)], new Vector2(x, y), biomeLogic, 0, 10, CHUNK_SIZE);
+                mapChunck.GetComponent<MeshRenderer>().material = this.mapTexture;
             }
         }
 

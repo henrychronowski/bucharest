@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6328899900782489764}
   - component: {fileID: 6328899900782489765}
   m_Layer: 0
-  m_Name: Map Chunk
+  m_Name: MapChunk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107,36 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49a0b65d1b2f1b647a280fbb13e9c6b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelOfDetail: 0
-  sourceImg: {fileID: 21300000, guid: 7f24f3a0299b6b842b4c9a050cd5548a, type: 3}
   seed: 1
-  heightScale: 4
-  octaves: 4
-  persitance: 1
-  effect: 2.94
-  heightCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  autoUpdate: 0
-  debugTools: 0
+  location: {x: 0, y: 0}
+  chunkSize: 0
+  levelOfDetail: 0
