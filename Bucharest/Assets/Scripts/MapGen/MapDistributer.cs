@@ -11,8 +11,12 @@ using System.Threading;
 public class MapDistributer : MonoBehaviour
 {
 
-    [SerializeField] private Sprite sourceImg = null;
     
+
+    [SerializeField] private Sprite sourceImg = null;
+
+    [SerializeField] private float biomeThreshHold = 0.5f;
+
     //[SerializeField] private Transform viewer = null;
 
     //[SerializeField] private static Vector2 viewerPosition;
@@ -29,6 +33,9 @@ public class MapDistributer : MonoBehaviour
 
 
 
+
+
+
     private Dictionary<int, BiomeData> biomeLogic = new Dictionary<int, BiomeData>();
 
     private List<Color> BiomesFound = new List<Color>();
@@ -37,6 +44,8 @@ public class MapDistributer : MonoBehaviour
 
 
 
+
+    
 
 
     private const int CHUNK_SIZE = 240;
@@ -140,7 +149,7 @@ public class MapDistributer : MonoBehaviour
                         bool newBiome = true;
                         for(int i = 0; i < BiomesFound.Count; i++)
                         {
-                            if (RGBequal(pixelColor, BiomesFound[i], 1f))
+                            if (!BiomeCopare(pixelColor, BiomesFound[i], this.biomeThreshHold))
                             {
                                 newBiome = false;
                             }
@@ -159,7 +168,7 @@ public class MapDistributer : MonoBehaviour
                         // get the index of the biome and store it at the location in the biome map keeping track of biomes
                         for (int i = 0; i < BiomesFound.Count; i++)
                         {
-                            if (RGBequal(pixelColor, BiomesFound[i], 1f))
+                            if (!BiomeCopare(pixelColor, BiomesFound[i], this.biomeThreshHold))
                             {
                                 landMap[chunkX, chunkY] = i;
                             }
@@ -192,12 +201,13 @@ public class MapDistributer : MonoBehaviour
     }
 
 
-    bool RGBequal(Color c1, Color c2, float threshHold)
+    bool BiomeCopare(Color c1, Color c2, float threshHold)
     {
+        // returns true if colors differtiate
         return (
-                (Mathf.Abs(c1.r - c2.r) < threshHold) &&
-                (Mathf.Abs(c1.g - c2.g) < threshHold) && 
-                (Mathf.Abs(c1.b - c2.b) < threshHold)
+                (Mathf.Abs(c1.r - c2.r) > threshHold) ||
+                (Mathf.Abs(c1.g - c2.g) > threshHold) || 
+                (Mathf.Abs(c1.b - c2.b) > threshHold)
                 );
     }
 
@@ -220,7 +230,7 @@ public class MapDistributer : MonoBehaviour
             for (int x = 0; x < chuncksLong; x++)
             {
                 MapChunk mapChunck = GameObject.Instantiate(mapChunckPrefab, new Vector3(x * CHUNK_SIZE, 0, y * CHUNK_SIZE), transform.rotation, this.transform);
-                mapChunck.GetComponent<MapChunk>().Generate(landMaps[new Vector2(x, y)], new Vector2(x, y), biomeLogic, 0, 10, CHUNK_SIZE);
+                mapChunck.GetComponent<MapChunk>().Generate(landMaps[new Vector2(x, y)], new Vector2(x, y), biomeLogic, 6, 10, CHUNK_SIZE);
             }
         }
 
