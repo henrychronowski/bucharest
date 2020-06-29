@@ -13,7 +13,8 @@ public class MinimapCameraController : MonoBehaviour
     private void Awake()
     {
         renderCamera.targetTexture = renderTexture;
-
+        RTImage(renderCamera);
+        RTImage(renderCamera);
         StartCoroutine(Render());
     }
 
@@ -29,14 +30,29 @@ public class MinimapCameraController : MonoBehaviour
         
     }
 
+    Texture2D RTImage(Camera camera)
+    {
+        var currentRT = RenderTexture.active;
+        RenderTexture.active = camera.targetTexture;
+
+        camera.Render();
+
+        Texture2D image = new Texture2D(camera.targetTexture.width, camera.targetTexture.height);
+        image.ReadPixels(new Rect(0, 0, camera.targetTexture.width, camera.targetTexture.height), 0, 0);
+        image.Apply();
+
+        RenderTexture.active = currentRT;
+        return image;
+    }
+
     IEnumerator Render()
     {
         while (true)
         {
             yield return new WaitForSeconds(delay);
             Debug.Log(renderCamera.activeTexture);
-            renderCamera.activeTexture.Release();
-            renderCamera.targetTexture = renderTexture;
+
+            RTImage(renderCamera);
         } 
     }
 }
