@@ -3,6 +3,16 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _Rows("Pixel Rows", Float) = 64
+        _Columns("Pixel Columns", Float) = 64
+
+        _ScanColor("Scan Color", COLOR) = (1, 1, 1, 1)
+
+        _DisplacementTex("Displace Texture", 2D) = "white" {}
+        _Distort("Distortion", Range(-0.1, 0.1)) = 0.0
+        _ScanDensity("Scan density", Range(0.0, 1.0)) = 1.0
+        _ScanThickness("Scan thickness", Range(0.0, 0.1)) = 0.05
+        _ScanPoint("Scan point", Range(0, 1)) = 0.5
     }
     SubShader
     {
@@ -14,8 +24,6 @@
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
-            #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
 
@@ -28,12 +36,22 @@
             struct v2f
             {
                 float2 uv : TEXCOORD0;
-                UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
             };
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+
+            float _Rows;
+            float _Columns;
+            float4 _ScanColor;
+            float _Density;
+            sampler2D _DisplacementTex;
+            float _Distort;
+            float _ScanDensity;
+            float _ScanThickness;
+            float _ScanPoint;
+
 
             v2f vert (appdata v)
             {
@@ -44,12 +62,25 @@
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            fixed4 frag(v2f i) : SV_Target
             {
-                // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
-                // apply fog
-                UNITY_APPLY_FOG(i.fogCoord, col);
+
+                float2 uv = i.uv;
+                uv.x *= _Columns;
+                uv.y *= _Rows;
+
+                uv.x = floor(uv.x);
+                uv.y = floor(uv.y);
+
+                uv.x /= _Columns;
+                uv.y /= _Rows;
+
+                //sample the texture
+                fixed4 col = tex2D(_MainTex, uv);
+
+                if (i.uv.y >= _ScanPoint && i.uv.y < _ScanPoint + _ScanThickness)
+                    col *= _ScanDensity;
+
                 return col;
             }
             ENDCG

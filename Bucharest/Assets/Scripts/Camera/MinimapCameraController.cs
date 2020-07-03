@@ -6,7 +6,7 @@ public class MinimapCameraController : MonoBehaviour
 {
     [SerializeField] Transform target;
     [SerializeField] Camera renderCamera;
-    [SerializeField] float delay = 0.5f;
+    [SerializeField] float delay;
     [SerializeField] RenderTexture renderTexture;
 
 
@@ -50,7 +50,6 @@ public class MinimapCameraController : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(delay);
-            Debug.Log(renderCamera.activeTexture);
 
             RTImage(renderCamera);
         } 

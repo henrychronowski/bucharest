@@ -153,7 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 113540267}
   renderCamera: {fileID: 113540266}
-  delay: 1
+  delay: 0.75
   renderTexture: {fileID: 8600000, guid: 6553c2d6185948e47a6c6dc8d5d114ab, type: 2}
 --- !u!20 &113540266
 Camera:
@@ -182,7 +182,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 0
-  orthographic size: 5
+  orthographic size: 24.43
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -620,6 +620,7 @@ GameObject:
   - component: {fileID: 1303938477}
   - component: {fileID: 1303938480}
   - component: {fileID: 1303938479}
+  - component: {fileID: 1303938478}
   m_Layer: 2
   m_Name: Quad
   m_TagString: Untagged
@@ -641,6 +642,23 @@ Transform:
   m_Father: {fileID: 632224627}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1303938478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303938476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87ab8481cb0e2ba448143000ee6938d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smoothRefresh: 1
+  smoothDistort: 0.01
+  interval: 1
+  mapMaterial: {fileID: 0}
+  refreshPoint: 0
 --- !u!23 &1303938479
 MeshRenderer:
   m_ObjectHideFlags: 0
