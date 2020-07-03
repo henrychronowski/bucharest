@@ -5,11 +5,9 @@
         _MainTex ("Texture", 2D) = "white" {}
         _Rows("Pixel Rows", Float) = 64
         _Columns("Pixel Columns", Float) = 64
+        _MapTint("Map Tint", COLOR) = (1, 1, 1, 1)
 
         _ScanColor("Scan Color", COLOR) = (1, 1, 1, 1)
-
-        _DisplacementTex("Displace Texture", 2D) = "white" {}
-        _Distort("Distortion", Range(-0.1, 0.1)) = 0.0
         _ScanDensity("Scan density", Range(0.0, 1.0)) = 1.0
         _ScanThickness("Scan thickness", Range(0.0, 0.1)) = 0.05
         _ScanPoint("Scan point", Range(0, 1)) = 0.5
@@ -44,10 +42,8 @@
 
             float _Rows;
             float _Columns;
+            float4 _MapTint;
             float4 _ScanColor;
-            float _Density;
-            sampler2D _DisplacementTex;
-            float _Distort;
             float _ScanDensity;
             float _ScanThickness;
             float _ScanPoint;
@@ -79,9 +75,9 @@
                 fixed4 col = tex2D(_MainTex, uv);
 
                 if (i.uv.y >= _ScanPoint && i.uv.y < _ScanPoint + _ScanThickness)
-                    col *= _ScanDensity;
+                    col *= _ScanColor * _ScanDensity;
 
-                return col;
+                return col * _MapTint;
             }
             ENDCG
         }
