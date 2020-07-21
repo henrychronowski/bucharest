@@ -540,6 +540,9 @@ MonoBehaviour:
   damping: 10
   xAngle: {x: -75, y: 0}
   turnSpeed: {x: 4, y: 4}
+  xMin: 1
+  maxView: 95
+  minView: 60
   interval: {x: 0, y: 30, z: 0}
   ignore:
   - MainCamera

@@ -1,5 +1,5 @@
 ﻿/* Author: Henry Chronowski
- * Updated: 06/15/2020
+ * Updated: 07/20/2020
  * Purpose: 3rd-person camera controller with collisions and mouse controls
  * */
 
@@ -19,6 +19,10 @@ public class CameraController : MonoBehaviour
 	[SerializeField] Vector2 turnSpeed = new Vector2(4.0f, 4.0f);
 	[SerializeField] float xMin = 1.0f;
 
+	[Header("FOV")]
+	[SerializeField] float maxView = 101.0f;
+	[SerializeField] float minView = 60.0f;
+
 	[Header("Whisker Casts")]
 	[SerializeField] Vector3 interval = new Vector3(0.0f, 30.0f, 0.0f);
 	[SerializeField] List<string> ignore = new List<string>();	//TODO: add a default "MainCamera" item
@@ -37,10 +41,12 @@ public class CameraController : MonoBehaviour
 
 	private void Update()
 	{
+#if UNITY_EDITOR
 		Debug.DrawLine(target.position, transform.position, Color.blue);
 		Debug.DrawLine(target.position, RotatePointAboutPoint(transform.position, target.position, interval), Color.red);
 		Debug.DrawLine(target.position, RotatePointAboutPoint(transform.position, target.position, -1.0f * interval), Color.cyan);
 		Debug.DrawLine(transform.position, transform.position - new Vector3(0.0f, xMin, 0.0f), Color.black);
+#endif
 	}
 
 	private Vector3 RotatePointAboutPoint(Vector3 point, Vector3 pivot, Vector3 angles)
@@ -70,6 +76,11 @@ public class CameraController : MonoBehaviour
 
 		// Clamps offset to collide with objects, whisker casts attempt to be proactive with clipping
 		offset = maxOffset;
+		gameObject.GetComponent<Camera>().fieldOfView = Mathf.Lerp(minView, maxView, Mathf.Abs(transform.eulerAngles.x / xAngle.x));
+		//offset = Mathf.Clamp(Mathf.Tan(((transform.eulerAngles.x) * Mathf.PI) / 180.0f) / Mathf.Tan(70.0f) * maxOffset, minOffset, maxOffset);
+		//Debug.Log(Mathf.Tan(((transform.eulerAngles.x) * Mathf.PI) / 180.0f) / Mathf.Tan(70.0f));
+		//offset = Mathf.Tan(Mathf.a)
+
 
 		if (Physics.Linecast(target.position, transform.position, out centre))
 		{
@@ -92,9 +103,9 @@ public class CameraController : MonoBehaviour
 				offset = Mathf.Clamp(left.distance - ncp, minOffset, maxOffset);
 			}
 		}
-		else if(Physics.Linecast(transform.position, transform.position - new Vector3(0.0f, xMin, 0.0f), out down))
+		else if (Physics.Linecast(transform.position, transform.position - new Vector3(0.0f, xMin, 0.0f), out down))
 		{
-			if(!ignore.Contains(down.transform.gameObject.tag))
+			if (!ignore.Contains(down.transform.gameObject.tag))
 			{
 				offset = Mathf.Clamp((down.distance / xMin) * maxOffset, minOffset, maxOffset);
 			}
