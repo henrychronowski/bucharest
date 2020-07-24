@@ -95,7 +95,7 @@ public class MapChunk : MonoBehaviour
         // Create Triangles
         List<int> triangles = CreateTriangles(vertArr, vertIndexes, meshSimpificationIncriment);
 
-        //create UV
+        
         
 
 
@@ -103,6 +103,7 @@ public class MapChunk : MonoBehaviour
         Mesh mesh = new Mesh();
         mesh.vertices = this.vertices.ToArray();
         mesh.triangles = triangles.ToArray();
+        //create UV
         mesh.uv = getUVs(vertIndexes, vertArr, meshSimpificationIncriment);
 
         //math that needs to change to dislove seames
@@ -264,50 +265,17 @@ public class MapChunk : MonoBehaviour
         Mesh finalMesh = CreateMesh(NoiseMap, this.landMap, this.levelOfDetail);
 
 
-
         GetComponent<MeshFilter>().mesh = finalMesh;
         GetComponent<MeshCollider>().sharedMesh = finalMesh;
     }
 
+
+
+
     private float[,] GenerateNoiseMaps(Vector2 location, int[,] landMap, Dictionary<int, BiomeData> biomeLogic)
     {
-        // create a item to return 
-        float[,] NoiseMap = new float[landMap.GetLength(0), landMap.GetLength(1)];
-
-
-        // generate map heights with octaves each octave being more imporatant in generation than last
-        for (int X = 0; X < NoiseMap.GetLength(0); X++)
-        {
-            for (int Z = 0; Z < NoiseMap.GetLength(1); Z++)
-            {
-
-                int biomeColor = landMap[X, Z];
-
-                float amp = 1;
-                float freq = 1;
-
-                float noiseHeight = 0;
-
-                for (int oct = 0; oct < biomeLogic[biomeColor].octaves; oct++)
-                {
-
-                    float PerlinX = ((float)X + (this.location.x * chunkSize))  / (float)this.chunkSize * freq;
-                    float PerlinZ = ((float)Z + (this.location.y * chunkSize)) / (float)this.chunkSize * freq;
-
-                    float perlinValue = (Mathf.PerlinNoise(this.seed + PerlinX, this.seed + PerlinZ) * 2 - 1) * biomeLogic[biomeColor].heightScale;
-                    perlinValue *= biomeLogic[biomeColor].heightCurve.Evaluate(perlinValue);
-
-                    noiseHeight += perlinValue * amp;
-
-                    amp *= biomeLogic[biomeColor].persitance;
-                    freq *= biomeLogic[biomeColor].effect;
-                }
-
-                NoiseMap[X, Z] = noiseHeight;
-            }
-        }
-
-        return NoiseMap;
+        UberNoise Noise = new UberNoise();
+        return Noise.CreateNoise(location, landMap, biomeLogic, this.chunkSize, this.seed);
     }
 
 
