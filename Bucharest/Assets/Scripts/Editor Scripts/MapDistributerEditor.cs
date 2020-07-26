@@ -13,6 +13,7 @@ using UnityEditor;
 [CustomEditor(typeof(MapDistributer))]
 public class MapDistributerEditor : Editor
 {
+
     public override void OnInspectorGUI()
     {
         MapDistributer mapDistributer = (MapDistributer)target;

@@ -32,7 +32,8 @@ public class MapChunk : MonoBehaviour
     //how detailed the mesh is
 
 
-
+    private List<Vector3> norms;
+    // list of Normals for mesh
 
     private List<Vector3> vertices;
     // list of verteices for mesh
@@ -81,7 +82,7 @@ public class MapChunk : MonoBehaviour
 
 
 
-    Mesh CreateMesh(float[,] NoiseMap, int[,] landMap, int levelOfDetail)
+    Mesh CreateMesh(NoiseSample[,] NoiseMap, int[,] landMap, int levelOfDetail)
     {
         // determins the level of detail to render at
         int meshSimpificationIncriment = (levelOfDetail == 0) ? 1 : levelOfDetail * 2;
@@ -107,7 +108,7 @@ public class MapChunk : MonoBehaviour
         mesh.uv = getUVs(vertIndexes, vertArr, meshSimpificationIncriment);
 
         //math that needs to change to dislove seames
-        mesh.normals = CalculateNormals(triangles);
+        mesh.normals = this.norms.ToArray();
 
         return mesh;
     }
@@ -160,11 +161,12 @@ public class MapChunk : MonoBehaviour
     }
 
 
-    private int[,] CreateVertices(bool[,] vertArr, float[,] noiseMap, int meshSimpificationIncriment)
+    private int[,] CreateVertices(bool[,] vertArr, NoiseSample[,] noiseMap, int meshSimpificationIncriment)
     {
         // vert index tells us the vertsindex in the vertices list
         // needed for mesh gen
         this.vertices = new List<Vector3>();
+        this.norms = new List<Vector3>();
         
         int[,] vertsIndex = new int[vertArr.GetLength(0), vertArr.GetLength(1)];
 
@@ -187,7 +189,10 @@ public class MapChunk : MonoBehaviour
             {
                 if (vertArr[x,y])
                 {
-                    this.vertices.Add(new Vector3(x, noiseMap[x, y], y));
+                    this.vertices.Add(new Vector3(x, noiseMap[x, y].value, y));
+
+                    Vector3 normalsized = noiseMap[x, y].derivative.normalized;
+                    this.norms.Add(new Vector3(-normalsized.x, 1, -normalsized.y));
                     vertsIndex[x, y] = this.vertCount;
                     this.vertCount++;
                 }
@@ -260,7 +265,7 @@ public class MapChunk : MonoBehaviour
 
         this.vertCount = 0;
         
-        float[,] NoiseMap = GenerateNoiseMaps(location, landMap, biomeLogic);
+        NoiseSample[,] NoiseMap = GenerateNoiseMaps(location, landMap, biomeLogic);
         
         Mesh finalMesh = CreateMesh(NoiseMap, this.landMap, this.levelOfDetail);
 
@@ -272,7 +277,7 @@ public class MapChunk : MonoBehaviour
 
 
 
-    private float[,] GenerateNoiseMaps(Vector2 location, int[,] landMap, Dictionary<int, BiomeData> biomeLogic)
+    private NoiseSample[,] GenerateNoiseMaps(Vector2 location, int[,] landMap, Dictionary<int, BiomeData> biomeLogic)
     {
         UberNoise Noise = new UberNoise();
         return Noise.CreateNoise(location, landMap, biomeLogic, this.chunkSize, this.seed);

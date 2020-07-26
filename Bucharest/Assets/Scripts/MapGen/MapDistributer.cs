@@ -11,7 +11,11 @@ using System.Threading;
 public class MapDistributer : MonoBehaviour
 {
 
-    
+    public void Start()
+    {
+        CreateMapData();
+        GenerateMap();
+    }
 
     [SerializeField] private Sprite sourceImg = null;
 
@@ -232,7 +236,7 @@ public class MapDistributer : MonoBehaviour
             for (int x = 0; x < chuncksLong; x++)
             {
                 MapChunk mapChunck = GameObject.Instantiate(mapChunckPrefab, new Vector3(x * CHUNK_SIZE, 0, y * CHUNK_SIZE), transform.rotation, this.transform);
-                mapChunck.GetComponent<MapChunk>().Generate(landMaps[new Vector2(x, y)], new Vector2(x, y), biomeLogic, 0, 10, CHUNK_SIZE);
+                mapChunck.GetComponent<MapChunk>().Generate(landMaps[new Vector2(x, y)], new Vector2(x, y), biomeLogic, 4, 10, CHUNK_SIZE);
                 mapChunck.GetComponent<MeshRenderer>().material = this.mapTexture;
             }
         }

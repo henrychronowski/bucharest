@@ -71,9 +71,11 @@
     <Compile Include="Assets\Scripts\Editor Scripts\Editor UI\IntDrawer.cs" />
     <Compile Include="Assets\Scripts\Editor Scripts\MapChunkEditor.cs" />
     <Compile Include="Assets\Scripts\Editor Scripts\MapDistributerEditor.cs" />
+    <Compile Include="Assets\Scripts\Editor Scripts\NormalsVisualizer.cs" />
     <Compile Include="Assets\Scripts\MapGen\BiomeData.cs" />
     <Compile Include="Assets\Scripts\MapGen\MapChunk.cs" />
     <Compile Include="Assets\Scripts\MapGen\MapDistributer.cs" />
+    <Compile Include="Assets\Scripts\MapGen\NoiseSample.cs.cs" />
     <Compile Include="Assets\Scripts\MapGen\UberNoise.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
     <Reference Include="UnityEngine">
