@@ -106,7 +106,7 @@ public class MapDistributer : MonoBehaviour
             for (int x = 0; x < chuncksLong; x++)
             {
                 // for every chunk
-                int[,] landMap = new int[CHUNK_SIZE + 2, CHUNK_SIZE + 2];
+                int[,] landMap = new int[CHUNK_SIZE + 3, CHUNK_SIZE + 3];
 
 
                 for (int chunkX = 0; chunkX < CHUNK_SIZE + 2; chunkX++)
@@ -236,7 +236,7 @@ public class MapDistributer : MonoBehaviour
             for (int x = 0; x < chuncksLong; x++)
             {
                 MapChunk mapChunck = GameObject.Instantiate(mapChunckPrefab, new Vector3(x * CHUNK_SIZE, 0, y * CHUNK_SIZE), transform.rotation, this.transform);
-                mapChunck.GetComponent<MapChunk>().Generate(landMaps[new Vector2(x, y)], new Vector2(x, y), biomeLogic, 4, 10, CHUNK_SIZE);
+                mapChunck.GetComponent<MapChunk>().Generate(landMaps[new Vector2(x, y)], new Vector2(x, y), biomeLogic, 0, 10, CHUNK_SIZE);
                 mapChunck.GetComponent<MeshRenderer>().material = this.mapTexture;
             }
         }

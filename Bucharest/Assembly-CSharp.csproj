@@ -78,6 +78,7 @@
     <Compile Include="Assets\Scripts\MapGen\NoiseSample.cs.cs" />
     <Compile Include="Assets\Scripts\MapGen\UberNoise.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
+    <None Include="Assets\Scripts\MapGen\NoiseGeneration.compute" />
     <Reference Include="UnityEngine">
       <HintPath>D:/Game Dev/Unity/Unity Editors/2019.3.14f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

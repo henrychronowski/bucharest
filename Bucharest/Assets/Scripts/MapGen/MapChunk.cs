@@ -9,8 +9,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.XR.WSA.Input;
 
 public class MapChunk : MonoBehaviour
 {
@@ -108,7 +110,7 @@ public class MapChunk : MonoBehaviour
         mesh.uv = getUVs(vertIndexes, vertArr, meshSimpificationIncriment);
 
         //math that needs to change to dislove seames
-        mesh.normals = this.norms.ToArray();
+        mesh.normals = CalculateNormals(triangles);
 
         return mesh;
     }
@@ -134,14 +136,17 @@ public class MapChunk : MonoBehaviour
 
     private List<int> CreateTriangles(bool[,] vertArr, int[,] vertIndexes, int meshSimpificationIncriment)
     {
+
+        Debug.Log("VertArr: " + vertArr.GetLength(0) + "    LandMap: " + landMap.GetLength(0) + "    VertIndexes: " + vertIndexes.GetLength(0));
+
         // kill me
         List<int> triangles = new List<int>();
 
-        for (int X = 0; X < vertArr.GetLength(0) - meshSimpificationIncriment; X += meshSimpificationIncriment)
+        for (int X = 0; X < landMap.GetLength(0) - meshSimpificationIncriment - 2; X += meshSimpificationIncriment)
         {
-            for (int Z = 0; Z < vertArr.GetLength(1) - meshSimpificationIncriment; Z += meshSimpificationIncriment)
+            for (int Z = 0; Z < landMap.GetLength(1) - meshSimpificationIncriment - 2; Z += meshSimpificationIncriment)
             {
-                if (landMap[X, Z] != 0)
+                if (landMap[X+1, Z+1] != 0)
                 {
                     triangles.Add(vertIndexes[X, Z]);
                     triangles.Add(vertIndexes[X, Z + meshSimpificationIncriment]);
@@ -165,6 +170,9 @@ public class MapChunk : MonoBehaviour
     {
         // vert index tells us the vertsindex in the vertices list
         // needed for mesh gen
+
+        Debug.Log("NoiseMap: " + noiseMap.GetLength(0) + "   VertArr: " +  vertArr.GetLength(0));
+
         this.vertices = new List<Vector3>();
         this.norms = new List<Vector3>();
         
@@ -183,18 +191,41 @@ public class MapChunk : MonoBehaviour
         
 
         // place vertices in world and array
-        for (int y = 0; y < vertsIndex.GetLength(1); y += meshSimpificationIncriment)
+        for (int y = 0; y < noiseMap.GetLength(1) - 2; y += meshSimpificationIncriment)
         {
-            for (int x = 0; x < vertsIndex.GetLength(0); x += meshSimpificationIncriment)
+            for (int x = 0; x < noiseMap.GetLength(0) - 2; x += meshSimpificationIncriment)
             {
                 if (vertArr[x,y])
                 {
-                    this.vertices.Add(new Vector3(x, noiseMap[x, y].value, y));
+                    this.vertices.Add(new Vector3(x, noiseMap[x + 1, y + 1].value, y));
 
-                    Vector3 normalsized = noiseMap[x, y].derivative.normalized;
-                    this.norms.Add(new Vector3(-normalsized.x, 1, -normalsized.y));
                     vertsIndex[x, y] = this.vertCount;
+
                     this.vertCount++;
+
+
+
+
+
+                    
+
+                   //used to recalcuate normals TO DO
+                    /*
+                    Vector3 derivsAvg = new Vector3(0, 0, 0);
+                    
+                    
+                    for (int l = -1; l < 2; l++)
+                    {
+                        for(int m = -1; m < 2; m++)
+                        {
+                            derivsAvg += noiseMap[x + 1 + l, y + 1+ m].derivative;
+                        }
+                    }
+                    derivsAvg = (derivsAvg / 9);
+
+                    this.norms.Add(new Vector3(-derivsAvg.x, 1f, -derivsAvg.y).normalized);
+                    */
+                    
                 }
             }
         }
@@ -211,8 +242,9 @@ public class MapChunk : MonoBehaviour
     private bool[,] FindVertices(int[,] landMap, int meshSimpificationIncriment)
     {
 
+       
         // find the location of all vertices baed on image in represntative 2d array
-        bool[,] vertTF = new bool[landMap.GetLength(0) - 1, landMap.GetLength(0) - 1];
+        bool[,] vertTF = new bool[landMap.GetLength(0) - 2, landMap.GetLength(0) - 2];
 
         // sets all locations to false
         for (int y = 0; y < vertTF.GetLength(1); y++)
@@ -234,11 +266,11 @@ public class MapChunk : MonoBehaviour
 
 
         // finds all the places that need vertices and saves locations to representaive 2d array
-        for(int y = 0; y < vertTF.GetLength(1) - meshSimpificationIncriment; y += meshSimpificationIncriment)
+        for(int y = 0; y < landMap.GetLength(1) - meshSimpificationIncriment - 2; y += meshSimpificationIncriment)
         {
-            for (int x = 0; x < vertTF.GetLength(0) - meshSimpificationIncriment; x += meshSimpificationIncriment)
+            for (int x = 0; x < landMap.GetLength(0) - meshSimpificationIncriment - 2; x += meshSimpificationIncriment)
             {
-                if (landMap[x, y] != 0)
+                if (landMap[x + 1, y + 1] != 0)
                 {
                     for(int k = 0; k < 4; k++)
                     {
@@ -249,8 +281,9 @@ public class MapChunk : MonoBehaviour
             }
         }
 
+        Debug.Log("Land Map: " + landMap.GetLength(0) + "   VertTf: " + vertTF.GetLength(0));
         return vertTF;
-
+        
     }
 
 
@@ -299,6 +332,72 @@ public class MapChunk : MonoBehaviour
 
     }
 
+    /*
+   private void OnDrawGizmos()
+   {
+
+
+           RaycastHit hit;
+
+           // send ray cast to center screen
+           if (!Physics.Raycast(SceneView.currentDrawingSceneView.camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out hit))
+               return;
+
+           // make sure we hit some mesh
+           MeshCollider meshCollider = hit.collider as MeshCollider;
+           if (meshCollider == null || meshCollider.sharedMesh == null)
+               return;
+
+           // get containers set up
+           Mesh mesh = meshCollider.sharedMesh;
+           Vector3[] vertices = mesh.vertices;
+           int[] triangles = mesh.triangles;
+
+           List<Vector3> showPOS = new List<Vector3>();
+           List<int> showPOSindex = new List<int>();
+
+
+
+           for (int i = 0; i < 3; i++)
+           {
+               //init triangle
+               showPOS.Add(vertices[triangles[hit.triangleIndex * 3 + i]]);
+               showPOSindex.Add(triangles[hit.triangleIndex * 3 + i]);
+
+               showPOS.Add(vertices[triangles[hit.triangleIndex * 3 + i]]);
+               showPOSindex.Add(triangles[hit.triangleIndex * 3 + i]);
+
+           }
+
+
+
+
+
+           // get location that was hit
+           Transform hitTransform = hit.collider.transform;
+
+
+           // draw spehere, text, and alighn point
+           for (int i = 0; i < showPOS.Count; i++)
+           {
+               showPOS[i] = hitTransform.TransformPoint(showPOS[i]);
+               Gizmos.DrawSphere(showPOS[i], .1f);
+               Handles.Label(showPOS[i], (showPOS[i].x + "-" + showPOS[i].z + "-" + showPOSindex[i]));
+           }
+
+
+           // draw lines
+           for (int i = 0; i < showPOS.Count; i += 3)
+           {
+               Gizmos.DrawLine(showPOS[i], showPOS[i + 1]);
+               Gizmos.DrawLine(showPOS[i + 1], showPOS[i + 2]);
+               Gizmos.DrawLine(showPOS[i + 2], showPOS[i]);
+
+           }
+
+
+       
+    }*/
 
 
 }

@@ -5,11 +5,18 @@ using TreeEditor;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.UIElements.Experimental;
+using Unity.Profiling;
 
 public class UberNoise
 {
+
+    public static ProfilerMarker danny = new ProfilerMarker("UberNoise.CreateNoise");
+    public static ProfilerMarker Jacob = new ProfilerMarker("UberNoise.Sum");
+
     public NoiseSample[,] CreateNoise(Vector2 location, int[,] landMap, Dictionary<int, BiomeData> biomeLogic, int chunkSize, int seed)
     {
+
+        danny.Begin();
 
         // create a item to return 
         NoiseSample[,] NoiseMap = new NoiseSample[landMap.GetLength(0), landMap.GetLength(1)];
@@ -46,10 +53,10 @@ public class UberNoise
                 
                 */
 
-                Vector3 pos = (Vector3)((new Vector2(X, Z) + location * 240f) / 240f);
+                Vector3 pos = (Vector3)((new Vector2(X-1, Z-1) + location * 240f) / 240f);
 
 
-                NoiseSample height = findNoise(pos);
+                NoiseSample height = Desert(pos);
 
 
                 NoiseMap[X, Z] = height;
@@ -57,6 +64,7 @@ public class UberNoise
             }
         }
 
+        danny.End();
         return NoiseMap;
 
 
@@ -67,7 +75,7 @@ public class UberNoise
 
 
 
-    NoiseSample findNoise(Vector3 inital)
+    NoiseSample Desert(Vector3 inital)
     {
 
         
@@ -92,7 +100,8 @@ public class UberNoise
 
 
         float rubble = Sum(Vector3.Scale((inital + q), new Vector3(1, 1, 400)), 10, 2, 10, 0.7f).value;
-        //float hilly = hills(pos);
+
+        float hilly = Sum(inital + q, 10, 2, 1, 0.5f).value;
 
         //float rub = rubble(point);
 
@@ -100,9 +109,13 @@ public class UberNoise
 
         float deriv = Vector3.Dot(Mountians.derivative, Mountians.derivative);
 
-        return Mountians * 100;
 
-        //return (rubble * (1f-sigmoid(deriv))) + (1 - Mathf.Abs(Mountians.value)) * 100;
+
+        NoiseSample FinalReturn = new NoiseSample();
+        FinalReturn.value = (rubble * (1f - sigmoid(deriv))) + (1 - Mathf.Abs(Mountians.value)) * 100 + Mathf.Abs(hilly);
+        FinalReturn.derivative = Mountians.derivative;
+
+        return FinalReturn; 
     }
     
 
@@ -321,6 +334,7 @@ public class UberNoise
 
     public static NoiseSample Sum(Vector3 point, float frequency = 1, int octaves = 2, float lacunarity = 1, float persistence = 0.5f)
     {
+        Jacob.Begin();
         NoiseSample sum = Perlin2D(point, frequency);
         float amplitude = 1f;
         float range = 1f;
@@ -331,6 +345,7 @@ public class UberNoise
             range += amplitude;
             sum += Perlin2D(point, frequency) * amplitude;
         }
+        Jacob.End();
         return sum * (1f / range); 
     }
 
