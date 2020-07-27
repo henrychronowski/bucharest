@@ -10,6 +10,7 @@ using UnityEditor;
 using UnityEngine;
 
 #if UNITY_EDITOR
+/*
 [CustomPropertyDrawer(typeof(int))]
 public class IntDrawer : PropertyDrawer
 {
@@ -22,5 +23,5 @@ public class IntDrawer : PropertyDrawer
 
 		EditorGUI.EndProperty();
 	}
-}
+}*/
 #endif
