@@ -9,27 +9,28 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-	[SerializeField] Transform target;
-	[SerializeField] float ncp = 0.1f;
-	[SerializeField] float minOffset = 1.0f;
-	[SerializeField] float maxOffset = 4.0f;
-	[SerializeField] float damping = 0.0f;
-	[Tooltip("x = min, y = max")]
-	[SerializeField] Vector2 xAngle = new Vector2(-75.0f, 0.0f);
-	[SerializeField] Vector2 turnSpeed = new Vector2(4.0f, 4.0f);
-	[SerializeField] float xMin = 1.0f;
+    [SerializeField] Transform target;
+    [SerializeField] float ncp = 0.1f;
+    [SerializeField] float minOffset = 1.0f;
+    [SerializeField] float maxOffset = 4.0f;
+    [SerializeField] float damping = 0.0f;
+    [Tooltip("x = min, y = max")]
+    [SerializeField] Vector2 xAngle = new Vector2(-75.0f, 0.0f);
+    [SerializeField] Vector2 turnSpeed = new Vector2(4.0f, 4.0f);
+    [SerializeField] float xMin = 1.0f;
 
-	[Header("FOV")]
-	[SerializeField] float maxView = 101.0f;
-	[SerializeField] float minView = 60.0f;
+    [Header("FOV")]
+    [SerializeField] float maxView = 101.0f;
+    [SerializeField] float minView = 60.0f;
 
-	[Header("Whisker Casts")]
-	[SerializeField] Vector3 interval = new Vector3(0.0f, 30.0f, 0.0f);
-	[SerializeField] List<string> ignore = new List<string>();	//TODO: add a default "MainCamera" item
-	
-	private float rotX = 0.0f;
-	private float offset;
-	private float prevOffset;
+    [Header("Whisker Casts")]
+    [SerializeField] Vector3 interval = new Vector3(0.0f, 30.0f, 0.0f);
+    [SerializeField] List<string> ignore = new List<string>();  //TODO: add a default "MainCamera" item
+
+    private float rotX = 0.0f;
+    private float offset;
+    private float prevOffset;
+    [SerializeField] private bool onPlayer;
 
 	private void Awake()
 	{
@@ -37,6 +38,11 @@ public class CameraController : MonoBehaviour
 
 		//NB: This line should not be in this file... game manager?
 		Cursor.lockState = CursorLockMode.Locked;
+
+        if(target.tag == "Player")
+        {
+            onPlayer = true;
+        }
 	}
 
 	private void Update()
@@ -63,9 +69,19 @@ public class CameraController : MonoBehaviour
 		float y = Input.GetAxis("Mouse X") * turnSpeed.y;
 		rotX += Input.GetAxis("Mouse Y") * turnSpeed.x;
 
-		rotX = Mathf.Clamp(rotX, xAngle.x, xAngle.y);
-		transform.eulerAngles = new Vector3(-rotX, transform.eulerAngles.y + y, transform.eulerAngles.z);
-		target.Rotate(0, y, 0);
+        rotX = Mathf.Clamp(rotX, xAngle.x, xAngle.y);
+
+        if (onPlayer)
+        {
+            transform.eulerAngles = new Vector3(-rotX, transform.eulerAngles.y + y, transform.eulerAngles.z);
+
+            target.Rotate(0, y, 0);
+        }
+        else
+        {
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, target.transform.eulerAngles.y, transform.eulerAngles.z);
+        }
+        
 
 		//Will be used to provide a free-look
 		//		Need to include some sort of storage of the original angle + lerp back to it after release
@@ -119,4 +135,21 @@ public class CameraController : MonoBehaviour
 
 		prevOffset = offset;
 	}
+
+    public void SetTarget(Transform transformObj)
+    {
+       
+        target = transformObj;
+
+        if (target.tag == "Player")
+        {
+            onPlayer = true;
+        }
+        else
+        {
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, target.transform.eulerAngles.y, transform.eulerAngles.z);
+            onPlayer = false;
+        }
+
+    }
 }

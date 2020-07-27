@@ -25,7 +25,10 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         rb = gameObject.GetComponent<Rigidbody>();
-        playerMap.SetActive(false);
+        if(playerMap != null)
+        {
+            playerMap.SetActive(false);
+        }
     }
 
     void Update()
@@ -37,9 +40,12 @@ public class PlayerMovement : MonoBehaviour
 			Move(Input.GetKey(KeyCode.LeftShift));
 		}
 
-        Vector3 loc = transform.position + raycastStartingLoc;
 
+        //debug code
+        Vector3 loc = transform.position + raycastStartingLoc;
         Debug.DrawLine(loc, loc + Vector3.down * raycastDistance, Color.red, 0.1f);
+
+
         if (Input.GetKey(KeyCode.Space))
         {
             Jump();
@@ -53,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
                 playerMap.SetActive(true);
         }
     }
-    
+    //fix
     void Move(bool sprinting)
     {
         if (sprinting && moveDir.x == 0)
