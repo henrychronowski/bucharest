@@ -136,9 +136,7 @@ public class BoatMovement : MonoBehaviour
         {
            
             raycastStartingPoints[i] = raycastStartingOffsets[i] + transform.position;
-            
-
-
+          
             if (debugEnabled)
             {
 
@@ -173,8 +171,8 @@ public class BoatMovement : MonoBehaviour
 
         if (!moving)
         {
-            normal.x += Mathf.Sin(time/2) / rockSpeedX;
-            normal.z += Mathf.Sin(time / 2) / rockSpeedZ;
+           // normal.x += Mathf.Sin(time/2) / rockSpeedX;
+           // normal.z += Mathf.Sin(time / 2) / rockSpeedZ;
         }
 
         Quaternion normalRot = Quaternion.LookRotation(Vector3.forward, normal);

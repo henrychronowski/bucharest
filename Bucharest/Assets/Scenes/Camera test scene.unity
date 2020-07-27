@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 870253091}
   m_Layer: 2
   m_Name: PlayerCube
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -347,6 +347,7 @@ MonoBehaviour:
   accelerationRate: 1
   raycastStartingLoc: {x: 0, y: -0.5, z: 0}
   raycastDistance: 0.25
+  playerMap: {fileID: 0}
 --- !u!65 &870253092
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -546,6 +547,7 @@ MonoBehaviour:
   interval: {x: 0, y: 30, z: 0}
   ignore:
   - MainCamera
+  onPlayer: 0
 --- !u!1 &1559400847
 GameObject:
   m_ObjectHideFlags: 0

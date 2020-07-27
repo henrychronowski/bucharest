@@ -25,7 +25,10 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         rb = gameObject.GetComponent<Rigidbody>();
-        playerMap.SetActive(false);
+        if(playerMap != null)
+        {
+            playerMap.SetActive(false);
+        }
     }
 
     void Update()

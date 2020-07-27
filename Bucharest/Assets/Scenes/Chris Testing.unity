@@ -168,7 +168,7 @@ MonoBehaviour:
   - {x: 0, y: 30, z: 0}
   - {x: 0, y: 30, z: 0}
   maxFloatHeight: 83.05
-  desiredHeight: 75
+  desiredHeight: 50
   normal: {x: 0.56849146, y: 6.7733235, z: -1.60971}
   PID:
     errorCoeff: 1
@@ -191,7 +191,7 @@ Transform:
   m_Children:
   - {fileID: 1724839009}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &216072110
 Rigidbody:
@@ -221,10 +221,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8883851c85197a4b94d8c54e83b229a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boatCameraLoc: {fileID: 490927569}
+  cameraController: {fileID: 0}
   player: {fileID: 1131333758}
   activationDistance: 5
-  rayOffSet: {x: 0, y: 0, z: 0}
   raycastDistance: 50
+  rayOffSet: {x: 0, y: 0, z: 0}
 --- !u!1 &473296040
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,8 +317,38 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &490927568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 490927569}
+  m_Layer: 0
+  m_Name: BoatCameraLoc
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &490927569
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490927568}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.1309, z: -0.3253}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1724839009}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &608519096
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,7 +440,7 @@ Transform:
   m_LocalScale: {x: 64.73933, y: 64.73933, z: 64.73933}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 3.0740001, y: 0, z: 0}
 --- !u!1 &740494946
 GameObject:
@@ -442,47 +474,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49a0b65d1b2f1b647a280fbb13e9c6b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sourceImg: {fileID: 21300000, guid: 06c5d515d2daac945b55db7fbeb0822d, type: 3}
   seed: 1
-  heightScale: 1
-  octaves: 4
-  persitance: 2
-  effect: 1.89
-  heightCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: -1
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -1
-      outSlope: -1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  autoUpdate: 1
-  debugTools: 1
+  location: {x: 0, y: 0}
+  chunkSize: 0
+  levelOfDetail: 0
 --- !u!23 &740494948
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -556,7 +551,7 @@ Transform:
   m_LocalScale: {x: 5.6042995, y: 5.6042995, z: 5.6042995}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &887716500
 GameObject:
@@ -649,7 +644,7 @@ Transform:
   m_LocalScale: {x: 64.73933, y: 64.73933, z: 64.73933}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -32.799, y: 0, z: 0}
 --- !u!1 &1131333758
 GameObject:
@@ -667,7 +662,7 @@ GameObject:
   - component: {fileID: 1131333764}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -690,6 +685,7 @@ MonoBehaviour:
   accelerationRate: 1
   raycastStartingLoc: {x: -5, y: 0, z: -5}
   raycastDistance: 0.25
+  playerMap: {fileID: 0}
 --- !u!65 &1131333760
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -762,7 +758,7 @@ Transform:
   m_LocalScale: {x: 7.9166, y: 7.9166, z: 7.9166}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: -86.58401, z: 0}
 --- !u!54 &1131333764
 Rigidbody:
@@ -778,7 +774,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 48
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!43 &1181052298
 Mesh:
@@ -1079,7 +1075,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 7.8734}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1802919969
 PrefabInstance:
@@ -1176,6 +1172,7 @@ GameObject:
   - component: {fileID: 2070792286}
   - component: {fileID: 2070792285}
   - component: {fileID: 2070792284}
+  - component: {fileID: 2070792287}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1242,9 +1239,35 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2070792283}
   m_LocalRotation: {x: 0.1406702, y: 0.0079093035, z: -0.0011236613, w: 0.99002427}
-  m_LocalPosition: {x: -0.001, y: 0.164, z: -0.423}
-  m_LocalScale: {x: 0.05827795, y: 0.096124135, z: 0.038108572}
+  m_LocalPosition: {x: 457.81192, y: 73.34847, z: 134.0463}
+  m_LocalScale: {x: 16.185802, y: 26.696997, z: 10.584067}
   m_Children: []
-  m_Father: {fileID: 1724839009}
+  m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 16.174002, y: 0.915, z: 0}
+--- !u!114 &2070792287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070792283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02f550db93abe984e86de16d4d219431, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1131333763}
+  ncp: 0
+  minOffset: 1
+  maxOffset: 4
+  damping: 10
+  xAngle: {x: -75, y: 0}
+  turnSpeed: {x: 4, y: 4}
+  xMin: 1
+  maxView: 95
+  minView: 60
+  interval: {x: 0, y: 30, z: 0}
+  ignore:
+  - MainCamera
+  onPlayer: 1

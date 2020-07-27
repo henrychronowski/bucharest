@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class Boat : MonoBehaviour
 {
+    [SerializeField] Transform boatCameraLoc;
+    [SerializeField] CameraController cameraController;
     [SerializeField] GameObject player;
     [SerializeField] int activationDistance;
-    [SerializeField] Vector3 rayOffSet;
     [SerializeField] float raycastDistance;
+    [SerializeField] Vector3 rayOffSet;
 
     private BoatMovement boatMovementScript;
     private bool playerOnBoat;
+    
 
     
 
@@ -19,6 +22,7 @@ public class Boat : MonoBehaviour
     {
         player = GameObject.Find("Player");
         boatMovementScript = gameObject.GetComponent<BoatMovement>();
+        cameraController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
         
     }
 
@@ -53,6 +57,7 @@ public class Boat : MonoBehaviour
     {
         player.SetActive(false);
         boatMovementScript.active = true;
+        cameraController.SetTarget(boatCameraLoc);
         playerOnBoat = true;
     }
 
@@ -61,6 +66,7 @@ public class Boat : MonoBehaviour
         player.SetActive(true);
         SetPlayerLoc();
         boatMovementScript.active = false;
+        cameraController.SetTarget(player.transform);
         playerOnBoat = false;
     }
 
