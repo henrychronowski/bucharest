@@ -17,12 +17,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float accelerationRate;
     [SerializeField] private Vector3 raycastStartingLoc;
     [SerializeField] private float raycastDistance;
+    [SerializeField] private GameObject playerMap;
     Rigidbody rb;
     Vector3 moveDir;
 
     private void Awake()
     {
         rb = gameObject.GetComponent<Rigidbody>();
+        playerMap.SetActive(false);
     }
 
     void Update()
@@ -40,6 +42,14 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             Jump();
+        }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            if (playerMap.activeSelf)
+                playerMap.SetActive(false);
+            else
+                playerMap.SetActive(true);
         }
     }
     
