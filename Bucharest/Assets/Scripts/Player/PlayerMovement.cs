@@ -34,15 +34,18 @@ public class PlayerMovement : MonoBehaviour
 			Move(Input.GetKey(KeyCode.LeftShift));
 		}
 
-        Vector3 loc = transform.position + raycastStartingLoc;
 
+        //debug code
+        Vector3 loc = transform.position + raycastStartingLoc;
         Debug.DrawLine(loc, loc + Vector3.down * raycastDistance, Color.red, 0.1f);
+
+
         if (Input.GetKey(KeyCode.Space))
         {
             Jump();
         }
     }
-    
+    //fix
     void Move(bool sprinting)
     {
         if (sprinting && moveDir.x == 0)

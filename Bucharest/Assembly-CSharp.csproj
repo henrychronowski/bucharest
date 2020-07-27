@@ -63,7 +63,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\BiomeData.cs" />
+    <Compile Include="Assets\Scripts\Boat\Boat.cs" />
     <Compile Include="Assets\Scripts\Boat\BoatMovement.cs" />
+    <Compile Include="Assets\Scripts\Boat\PIDController.cs" />
     <Compile Include="Assets\Scripts\Camera\Camera1.cs" />
     <Compile Include="Assets\Scripts\Camera\Camera2.cs" />
     <Compile Include="Assets\Scripts\Camera\Camera3.cs" />
