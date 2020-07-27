@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class PlayerMap : MonoBehaviour
 {
-    public float smoothRefresh;
     public float smoothDistort;
-    public float interval;
 
     [SerializeField] Material mapMaterial;
 
