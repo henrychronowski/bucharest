@@ -64,11 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\BiomeData.cs" />
-    <Compile Include="Assets\Scripts\Camera\Camera1.cs" />
-    <Compile Include="Assets\Scripts\Camera\Camera2.cs" />
-    <Compile Include="Assets\Scripts\Camera\Camera3.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
-    <Compile Include="Assets\Scripts\Camera\CameraWatch.cs" />
     <Compile Include="Assets\Scripts\Editor Scripts\Editor UI\IntDrawer.cs" />
     <Compile Include="Assets\Scripts\Editor Scripts\MapGeneratorEditor.cs" />
     <Compile Include="Assets\Scripts\MapGen.cs" />

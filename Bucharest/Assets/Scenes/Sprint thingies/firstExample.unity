@@ -510,12 +510,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 632224627}
-  inPlayer: 0.1
+  ncp: 0.1
   minOffset: 1
   maxOffset: 4
-  damping: 0
+  damping: 10
   xAngle: {x: -75, y: 0}
   turnSpeed: {x: 4, y: 4}
+  xMin: 1
+  interval: {x: 0, y: 30, z: 0}
+  ignore:
+  - MainCamera
 --- !u!1 &1795988460
 GameObject:
   m_ObjectHideFlags: 0
